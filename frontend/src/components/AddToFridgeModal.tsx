@@ -25,7 +25,7 @@ const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
   onInputChange,
   ingredientName
 }) => (
-  <div>
+  <>
     {open && (
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal" onClick={e => e.stopPropagation()}>
@@ -64,7 +64,7 @@ const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
         </div>
       </div>
     )}
-  </div>
+  </>
 );
 
 export default AddToFridgeModal;

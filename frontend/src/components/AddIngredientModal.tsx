@@ -24,7 +24,7 @@ const AddIngredientModal: React.FC<AddIngredientModalProps> = ({
   newIngredient,
   onInputChange
 }) => (
-  <div>
+  <>
     {open && (
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal" onClick={e => e.stopPropagation()}>
@@ -66,7 +66,7 @@ const AddIngredientModal: React.FC<AddIngredientModalProps> = ({
         </div>
       </div>
     )}
-  </div>
+  </>
 );
 
 export default AddIngredientModal;
