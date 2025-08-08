@@ -29,12 +29,14 @@ const Recipes: React.FC = () => {
   return (
     <>
       <h2>Recipes</h2>
-      <div className="tab-content">
-        {recipes.length === 0 ? (
-          <div>No recipes found.</div>
-        ) : (
-          <RecipesTable recipes={recipes} onShowInstructions={openInstructionsModal} />
-        )}
+      <div className="tab-modal-container">
+        <div className="tab-content">
+          {recipes.length === 0 ? (
+            <div>No recipes found.</div>
+          ) : (
+            <RecipesTable recipes={recipes} onShowInstructions={openInstructionsModal} />
+          )}
+        </div>
         <Modal open={modalOpen && !!selectedRecipe} onClose={() => setModalOpen(false)} title={selectedRecipe ? `Instructions for ${selectedRecipe.name}` : undefined}>
           <div style={{ whiteSpace: 'pre-line', marginBottom: 16 }}>{selectedRecipe?.instructions || 'No instructions provided.'}</div>
           <button onClick={() => setModalOpen(false)} style={{ padding: '0.5em 1.5em' }}>Close</button>

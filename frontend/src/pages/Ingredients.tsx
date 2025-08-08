@@ -17,8 +17,9 @@ const Ingredients: React.FC = () => {
   });
   const [adding, setAdding] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [fridgeModalOpen, setFridgeModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState("none");
+  const ingredientModalOpen = modalOpen == "ingredient"
+  const fridgeModalOpen = modalOpen == "fridge";
   const [selectedIngredient, setSelectedIngredient] = useState<any | null>(null);
   const [fridgeForm, setFridgeForm] = useState({
     quantity: '',
@@ -50,7 +51,7 @@ const Ingredients: React.FC = () => {
       const added = await import("../api").then(m => m.addIngredient(newIngredient));
       setIngredients((prev) => [...prev, added]);
       setNewIngredient({ name: "", category: "", default_unit: "", calories_per_unit: "" });
-      setModalOpen(false);
+      setModalOpen("none");
     } catch (err: any) {
       setAddError(err.message || "Failed to add ingredient");
     } finally {
@@ -65,7 +66,7 @@ const Ingredients: React.FC = () => {
       unit: ingredient.default_unit || '',
       expiration_date: ''
     });
-    setFridgeModalOpen(true);
+    setModalOpen("fridge");
     setFridgeError(null);
   };
 
@@ -91,7 +92,7 @@ const Ingredients: React.FC = () => {
         unit,
         expiration_date
       }));
-      setFridgeModalOpen(false);
+      setModalOpen("none");
     } catch (err: any) {
       setFridgeError(err.message || 'Failed to add to fridge');
     } finally {
@@ -115,11 +116,22 @@ const Ingredients: React.FC = () => {
   return (
     <>
       <h2>Ingredients</h2>
-      <div className="tab-content">
-        <button onClick={() => setModalOpen(true)} style={{ marginBottom: 16, padding: '0.5em 1.5em' }}>Add Ingredient</button>
+      <div className="tab-modal-container">
+        <div className="tab-content">
+          <button onClick={() => setModalOpen("ingredient")} style={{ marginBottom: 16, padding: '0.5em 1.5em' }}>Add Ingredient</button>
+          {ingredients.length === 0 ? (
+            <div>No ingredients found.</div>
+          ) : (
+            <IngredientsTable
+              ingredients={ingredients}
+              onAddToFridge={openFridgeModal}
+              onDelete={handleDeleteIngredient}
+            />
+          )}
+        </div>
         <AddIngredientModal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
+          open={ingredientModalOpen}
+          onClose={() => setModalOpen("none")}
           onSubmit={handleAddIngredient}
           adding={adding}
           addError={addError}
@@ -128,7 +140,7 @@ const Ingredients: React.FC = () => {
         />
         <AddToFridgeModal
           open={fridgeModalOpen && !!selectedIngredient}
-          onClose={() => setFridgeModalOpen(false)}
+          onClose={() => setModalOpen("none")}
           onSubmit={handleAddToFridge}
           fridgeAdding={fridgeAdding}
           fridgeError={fridgeError}
@@ -136,15 +148,6 @@ const Ingredients: React.FC = () => {
           onInputChange={handleFridgeInputChange}
           ingredientName={selectedIngredient?.name}
         />
-        {ingredients.length === 0 ? (
-          <div>No ingredients found.</div>
-        ) : (
-          <IngredientsTable
-            ingredients={ingredients}
-            onAddToFridge={openFridgeModal}
-            onDelete={handleDeleteIngredient}
-          />
-        )}
       </div>
     </>
   );
