@@ -53,10 +53,10 @@ const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients, onAddT
                 <TableCell>{ing.default_unit}</TableCell>
                 <TableCell>{ing.calories_per_unit}</TableCell>
                 <TableCell>
-                  <div className="fake-button" title="Add to fridge" onClick={() => onAddToFridge(ing)}><FaPlusCircle /></div>
+                  <div className="fake-button" title="Add to fridge" onClick={() => onAddToFridge(ing)}><FaPlusCircle size={20}/></div>
                 </TableCell>
                 <TableCell>
-                  <div className="fake-button" title="Delete ingredient" onClick={() => onDelete(ing.id)}><FaMinusCircle /></div>
+                  <div className="fake-button" title="Delete ingredient" onClick={() => onDelete(ing.id)}><FaMinusCircle size={20}/></div>
                 </TableCell>
               </TableRow>
             ))}
