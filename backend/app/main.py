@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import models
-from .api import fridge_items, ingredients, recipes
+from .api import fridge_items, ingredients, meal_types, recipes, schedule
 from .database import engine
 
 models.Base.metadata.create_all(bind=engine)
@@ -12,6 +12,9 @@ app = FastAPI()
 app.include_router(ingredients.router)
 app.include_router(recipes.router)
 app.include_router(fridge_items.router)
+app.include_router(meal_types.router)
+app.include_router(schedule.router)
+
 
 app.add_middleware(
     CORSMiddleware,
