@@ -29,6 +29,17 @@ body {
   padding: 2rem 2rem 2rem 2.5rem;
 }
 
+.MuiPaper-root {
+  background: none !important;
+  color: #fdfdfd !important;
+  --Paper-shadow: none !important;
+  width: 100% !important;
+}
+
+.MuiTablePagination-root {
+  color: #fdfdfd !important;
+}
+
 .full-width-table {
   width: 100%;
   color: #fdfdfd;
@@ -40,6 +51,12 @@ body {
 .full-width-table th, .full-width-table td {
   padding: 0.75rem 1rem;
   text-align: left;
+  color: #fdfdfd;
+  border: 0;
+}
+
+.full-width-table tr:hover, .full-width-table td:hover {
+  background-attachment: red !important;
 }
 
 .full-width-table th {

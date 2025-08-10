@@ -1,53 +1,85 @@
-import React, { useState } from "react";
+import React from "react";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
+import { FaEye } from "react-icons/fa";
 
 interface RecipesTableProps {
   recipes: any[];
   onShowInstructions: (recipe: any) => void;
 }
 
-const PAGE_SIZE = 10;
-
 const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onShowInstructions }) => {
-  const [page, setPage] = useState(0);
-  const pageCount = Math.ceil(recipes.length / PAGE_SIZE);
-  const pagedRecipes = recipes.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const pagedRecipes = recipes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  // Calculate the number of empty rows to fill the table to a fixed height
+  const emptyRows = rowsPerPage - pagedRecipes.length;
 
   return (
-    <>
-      <table className="full-width-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Servings</th>
-            <th>Prep Time</th>
-            <th>Cook Time</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {pagedRecipes.map((rec) => (
-            <tr key={rec.id}>
-              <td>{rec.name}</td>
-              <td>{rec.description}</td>
-              <td>{rec.servings}</td>
-              <td>{rec.prep_time_min} min</td>
-              <td>{rec.cook_time_min} min</td>
-              <td>
-                <button onClick={() => onShowInstructions(rec)} style={{ padding: '0.3em 1em' }}>Instructions</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {pageCount > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 12 }}>
-          <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0}>&lt;</button>
-          <span className="page-counter">Page {page + 1} of {pageCount}</span>
-          <button onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))} disabled={page === pageCount - 1}>&gt;</button>
-        </div>
-      )}
-    </>
+    <Paper sx={{ width: '90%', overflow: 'hidden' }}>
+      <TableContainer>
+        <Table className="full-width-table" stickyHeader aria-label="recipes table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Servings</TableCell>
+              <TableCell>Prep Time</TableCell>
+              <TableCell>Cook Time</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {pagedRecipes.map((rec) => (
+              <TableRow hover key={rec.id}>
+                <TableCell>{rec.name}</TableCell>
+                <TableCell>{rec.description}</TableCell>
+                <TableCell>{rec.servings}</TableCell>
+                <TableCell>{rec.prep_time_min} min</TableCell>
+                <TableCell>{rec.cook_time_min} min</TableCell>
+                <TableCell>
+                  <button onClick={() => onShowInstructions(rec)} style={{ padding: '0.3em 1em' }}>
+                    <FaEye/>
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))}
+            {emptyRows > 0 &&
+              Array.from({ length: emptyRows }).map((_, idx) => (
+                <TableRow key={`empty-${idx}`} style={{ height: 55.4 }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        component="div"
+        count={recipes.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 };
 
