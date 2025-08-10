@@ -56,14 +56,14 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
                 <TableCell>{rec.prep_time_min} min</TableCell>
                 <TableCell>{rec.cook_time_min} min</TableCell>
                 <TableCell>
-                  <button onClick={() => onButtonsClick(rec, "instructions")}>
-                    <FaEye/>
-                  </button>
+                  <div className="fake-button" onClick={() => onButtonsClick(rec, "instructions")}>
+                    <FaEye size={20}/>
+                  </div>
                 </TableCell>
                 <TableCell>
-                  <button onClick={() => onButtonsClick(rec, "addToSchedule")}>
-                    <FaCartPlus/>
-                  </button>
+                  <div className="fake-button" onClick={() => onButtonsClick(rec, "addToSchedule")}>
+                    <FaCartPlus  size={20}/>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchMealTypes, fetchSchedule } from "../api";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 
 
 interface ScheduleTableProps {
@@ -48,7 +49,17 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd }) => 
               const recipe = schedule.find(item => item.date === date && item.meal_type === mealType.id);
               return (
                 <td key={mealType.id}>
-                  {recipe ? recipe.recipe_name : ""}
+                  <div className={`schedule-field ${recipe ? "" : "schedule-field-center"}`}>
+                    <div>{recipe ? recipe.recipe_name : ""}</div>
+                    <div className="fake-button">
+                      {recipe ? (
+                        <FaMinusCircle />
+                      ) : (
+                        <FaPlusCircle />
+                      )}
+                    </div>
+
+                  </div>
                 </td>
               );
             })}
