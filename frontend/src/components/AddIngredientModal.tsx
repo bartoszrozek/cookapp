@@ -1,4 +1,5 @@
 import React from "react";
+import { IoMdClose } from "react-icons/io";
 
 interface AddIngredientModalProps {
   open: boolean;
@@ -27,9 +28,17 @@ const AddIngredientModal: React.FC<AddIngredientModalProps> = ({
   <>
     {open && (
       <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-header">
+          <h3 className="modal-title">Add Ingredient</h3>
+          <button
+            className="modal-close-button"
+            onClick={() => onClose()}
+          >
+            <IoMdClose size={16} />
+          </button>
+        </div>
         <div className="modal" onClick={e => e.stopPropagation()}>
-          <h3>Add Ingredient</h3>
-          <form onSubmit={onSubmit} style={{display: 'flex', flexDirection: 'column', gap: 12}}>
+          <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <input
               name="name"
               placeholder="Name"
@@ -57,10 +66,10 @@ const AddIngredientModal: React.FC<AddIngredientModalProps> = ({
               value={newIngredient.calories_per_unit}
               onChange={onInputChange}
             />
-            <div style={{display: 'flex', gap: 8, alignItems: 'center'}}>
-              <button type="submit" disabled={adding} style={{padding: '0.5em 1.5em'}}>Add</button>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <button type="submit" disabled={adding} style={{ padding: '0.5em 1.5em' }}>Add</button>
               <button type="button" onClick={onClose}>Cancel</button>
-              {addError && <span style={{color: 'red'}}>{addError}</span>}
+              {addError && <span style={{ color: 'red' }}>{addError}</span>}
             </div>
           </form>
         </div>

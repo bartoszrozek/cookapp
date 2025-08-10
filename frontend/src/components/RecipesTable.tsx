@@ -7,14 +7,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaCartPlus} from "react-icons/fa";
 
 interface RecipesTableProps {
   recipes: any[];
-  onShowInstructions: (recipe: any) => void;
+  onButtonsClick: (recipe: string, modal: string) => void;
 }
 
-const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onShowInstructions }) => {
+const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -44,6 +44,7 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onShowInstructions
               <TableCell>Prep Time</TableCell>
               <TableCell>Cook Time</TableCell>
               <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -55,15 +56,20 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onShowInstructions
                 <TableCell>{rec.prep_time_min} min</TableCell>
                 <TableCell>{rec.cook_time_min} min</TableCell>
                 <TableCell>
-                  <button onClick={() => onShowInstructions(rec)} style={{ padding: '0.3em 1em' }}>
+                  <button onClick={() => onButtonsClick(rec, "instructions")}>
                     <FaEye/>
+                  </button>
+                </TableCell>
+                <TableCell>
+                  <button onClick={() => onButtonsClick(rec, "addToMenu")}>
+                    <FaCartPlus/>
                   </button>
                 </TableCell>
               </TableRow>
             ))}
             {emptyRows > 0 &&
               Array.from({ length: emptyRows }).map((_, idx) => (
-                <TableRow key={`empty-${idx}`} style={{ height: 55.4 }}>
+                <TableRow key={`empty-${idx}`} style={{ height: 59.8 }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               ))}

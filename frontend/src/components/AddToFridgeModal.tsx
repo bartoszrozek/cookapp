@@ -1,4 +1,5 @@
 import React from "react";
+import { IoMdClose } from "react-icons/io";
 
 interface AddToFridgeModalProps {
   open: boolean;
@@ -28,9 +29,17 @@ const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
   <>
     {open && (
       <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-header">
+          <h3 className="modal-title">{ingredientName ? `Add to Fridge: ${ingredientName}` : 'Add to Fridge'}</h3>
+          <button
+            className="modal-close-button"
+            onClick={() => onClose()}
+          >
+            <IoMdClose size={16} />
+          </button>
+        </div>
         <div className="modal" onClick={e => e.stopPropagation()}>
-          <h3>{ingredientName ? `Add to Fridge: ${ingredientName}` : 'Add to Fridge'}</h3>
-          <form onSubmit={onSubmit} style={{display: 'flex', flexDirection: 'column', gap: 12}}>
+          <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <input
               name="quantity"
               placeholder="Quantity"
@@ -55,10 +64,10 @@ const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
               onChange={onInputChange}
               required
             />
-            <div style={{display: 'flex', gap: 8, alignItems: 'center'}}>
-              <button type="submit" disabled={fridgeAdding} style={{padding: '0.5em 1.5em'}}>Add</button>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <button type="submit" disabled={fridgeAdding} style={{ padding: '0.5em 1.5em' }}>Add</button>
               <button type="button" onClick={onClose}>Cancel</button>
-              {fridgeError && <span style={{color: 'red'}}>{fridgeError}</span>}
+              {fridgeError && <span style={{ color: 'red' }}>{fridgeError}</span>}
             </div>
           </form>
         </div>

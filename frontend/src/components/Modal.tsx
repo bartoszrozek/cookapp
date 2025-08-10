@@ -1,4 +1,6 @@
 import React from "react";
+import { IoMdClose } from "react-icons/io";
+
 
 interface ModalProps {
   open: boolean;
@@ -11,8 +13,16 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children }) => {
   if (!open) return null;
   return (
     <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-header">
+        {title && <h3 className="modal-title">{title}</h3>}
+        <button
+          className="modal-close-button"
+          onClick={() => onClose()}
+        >
+          <IoMdClose size={16} />
+        </button>
+      </div>
       <div className="modal" onClick={e => e.stopPropagation()}>
-        {title && <h3>{title}</h3>}
         {children}
       </div>
     </div>
