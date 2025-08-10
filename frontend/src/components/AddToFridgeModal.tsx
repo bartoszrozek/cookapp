@@ -28,7 +28,7 @@ const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
 }) => (
   <>
     {open && (
-      <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-overlay">
         <div className="modal-header">
           <h3 className="modal-title">{ingredientName ? `Add to Fridge: ${ingredientName}` : 'Add to Fridge'}</h3>
           <button

@@ -26,7 +26,7 @@ const AddToMenuModal: React.FC<AddToMenuModalProps> = ({
 }) => (
   <>
     {open && (
-      <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-overlay">
         <div className="modal-header">
           <h3 className="modal-title">{recipeName ? `Add to Menu: ${recipeName}` : 'Add to Menu'}</h3>
           <button

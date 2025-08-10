@@ -27,7 +27,7 @@ const AddIngredientModal: React.FC<AddIngredientModalProps> = ({
 }) => (
   <>
     {open && (
-      <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-overlay">
         <div className="modal-header">
           <h3 className="modal-title">Add Ingredient</h3>
           <button
@@ -68,7 +68,6 @@ const AddIngredientModal: React.FC<AddIngredientModalProps> = ({
             />
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <button type="submit" disabled={adding} style={{ padding: '0.5em 1.5em' }}>Add</button>
-              <button type="button" onClick={onClose}>Cancel</button>
               {addError && <span style={{ color: 'red' }}>{addError}</span>}
             </div>
           </form>

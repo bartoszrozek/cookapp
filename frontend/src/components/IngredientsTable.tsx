@@ -40,6 +40,7 @@ const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients, onAddT
               <TableCell>Default Unit</TableCell>
               <TableCell>Calories/Unit</TableCell>
               <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -51,6 +52,8 @@ const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients, onAddT
                 <TableCell>{ing.calories_per_unit}</TableCell>
                 <TableCell>
                   <button title="Add to fridge" onClick={() => onAddToFridge(ing)} style={{ fontSize: '1.2em', padding: '0.2em 0.7em' }}>+</button>
+                  </TableCell>
+                <TableCell>
                   <button title="Delete ingredient" onClick={() => onDelete(ing.id)} style={{ fontSize: '1.2em', padding: '0.2em 0.7em', color: 'red' }}>-</button>
                 </TableCell>
               </TableRow>
