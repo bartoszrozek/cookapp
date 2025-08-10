@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import { FaEye, FaCartPlus} from "react-icons/fa";
+import DivButton from "../components/DivButton";
 
 interface RecipesTableProps {
   recipes: any[];
@@ -56,14 +57,14 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
                 <TableCell>{rec.prep_time_min} min</TableCell>
                 <TableCell>{rec.cook_time_min} min</TableCell>
                 <TableCell>
-                  <div className="fake-button" onClick={() => onButtonsClick(rec, "instructions")}>
+                  <DivButton tooltip="See instructions" onClick={() => onButtonsClick(rec, "instructions")}>
                     <FaEye size={20}/>
-                  </div>
+                  </DivButton>
                 </TableCell>
                 <TableCell>
-                  <div className="fake-button" onClick={() => onButtonsClick(rec, "addToSchedule")}>
+                  <DivButton tooltip="Add to schedule" onClick={() => onButtonsClick(rec, "addToSchedule")}>
                     <FaCartPlus  size={20}/>
-                  </div>
+                  </DivButton>
                 </TableCell>
               </TableRow>
             ))}

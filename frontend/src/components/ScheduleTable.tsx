@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchMealTypes, fetchSchedule } from "../api";
-import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
-
+import { FaMinusCircle, FaPlusCircle, FaEye } from "react-icons/fa";
+import DivButton from "../components/DivButton";
 
 interface ScheduleTableProps {
   weekStart: Date;
@@ -27,9 +27,9 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd }) => 
   return (<table className="full-width-table">
     <thead>
       <tr>
-        <th>Date</th>
+        <th style={{ textAlign: "center" }}>Date</th>
         {mealTypes.map(mealType => (
-          <th key={mealType.id}>{mealType.name}</th>
+          <th key={mealType.id} style={{ textAlign: "center" }}>{mealType.name}</th>
         ))}
       </tr>
     </thead>
@@ -51,13 +51,15 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd }) => 
                 <td key={mealType.id}>
                   <div className={`schedule-field ${recipe ? "" : "schedule-field-center"}`}>
                     <div>{recipe ? recipe.recipe_name : ""}</div>
-                    <div className="fake-button">
-                      {recipe ? (
-                        <FaMinusCircle />
-                      ) : (
-                        <FaPlusCircle />
-                      )}
-                    </div>
+                    {recipe ? (
+                      <div>
+                        <DivButton tooltip = "See instructions"><FaEye /></DivButton>
+                        <DivButton tooltip = "Delete dish"><FaMinusCircle /></DivButton>
+                      </div>
+                    ) : (
+                      <DivButton tooltip = "Add dish"><FaPlusCircle /></DivButton>
+                    )}
+
 
                   </div>
                 </td>

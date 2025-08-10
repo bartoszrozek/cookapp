@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import DivButton from "../components/DivButton";
 
 
 interface IngredientsTableProps {
@@ -53,10 +54,10 @@ const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients, onAddT
                 <TableCell>{ing.default_unit}</TableCell>
                 <TableCell>{ing.calories_per_unit}</TableCell>
                 <TableCell>
-                  <div className="fake-button" title="Add to fridge" onClick={() => onAddToFridge(ing)}><FaPlusCircle size={20}/></div>
+                  <DivButton tooltip = "Add to fridge" onClick={() => onAddToFridge(ing)}><FaPlusCircle size={20}/></DivButton>
                 </TableCell>
                 <TableCell>
-                  <div className="fake-button" title="Delete ingredient" onClick={() => onDelete(ing.id)}><FaMinusCircle size={20}/></div>
+                  <DivButton tooltip = "Delete ingredient" onClick={() => onDelete(ing.id)}><FaMinusCircle size={20}/></DivButton>
                 </TableCell>
               </TableRow>
             ))}
