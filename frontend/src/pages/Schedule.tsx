@@ -36,7 +36,7 @@ const Schedule: React.FC = () => {
 
       <div className="tab-content">
         <ScheduleTable weekStart={monday} weekEnd={sunday} />
-        <div style={{ marginBottom: "1rem" }}>
+        <div className="button-group">
           <button onClick={handlePrevWeek}>Previous Week</button>
           <button onClick={handleNextWeek}>Next Week</button>
         </div>

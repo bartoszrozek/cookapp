@@ -118,7 +118,9 @@ const Ingredients: React.FC = () => {
       <h2>Ingredients</h2>
       <div className="tab-modal-container">
         <div className="tab-content">
-          <button onClick={() => setModalOpen("ingredient")} style={{ marginBottom: 16, padding: '0.5em 1.5em' }}>Add Ingredient</button>
+          <div className="button-group">
+            <button onClick={() => setModalOpen("ingredient")} >Add Ingredient</button>
+          </div>
           {ingredients.length === 0 ? (
             <div>No ingredients found.</div>
           ) : (
