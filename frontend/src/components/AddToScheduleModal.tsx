@@ -1,26 +1,26 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 
-interface AddToMenuModalProps {
+interface AddToScheduleModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (e: React.FormEvent) => void;
-  menuAdding: boolean;
-  menuError: string | null;
-  menuForm: {
+  scheduleAdding: boolean;
+  scheduleError: string | null;
+  scheduleForm: {
     date: string;
   };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   recipeName?: string;
 }
 
-const AddToMenuModal: React.FC<AddToMenuModalProps> = ({
+const AddToScheduleModal: React.FC<AddToScheduleModalProps> = ({
   open,
   onClose,
   onSubmit,
-  menuAdding,
-  menuError,
-  menuForm,
+  scheduleAdding,
+  scheduleError,
+  scheduleForm,
   onInputChange,
   recipeName
 }) => (
@@ -28,7 +28,7 @@ const AddToMenuModal: React.FC<AddToMenuModalProps> = ({
     {open && (
       <div className="modal-overlay">
         <div className="modal-header">
-          <h3 className="modal-title">{recipeName ? `Add to Menu: ${recipeName}` : 'Add to Menu'}</h3>
+          <h3 className="modal-title">{recipeName ? `Add to Schedule: ${recipeName}` : 'Add to Schedule'}</h3>
           <button
             className="modal-close-button"
             onClick={() => onClose()}
@@ -42,14 +42,14 @@ const AddToMenuModal: React.FC<AddToMenuModalProps> = ({
               name="date"
               placeholder="Date (YYYY-MM-DD)"
               type="date"
-              value={menuForm.date}
+              value={scheduleForm.date}
               onChange={onInputChange}
               required
             />
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <button type="submit" disabled={menuAdding} style={{ padding: '0.5em 1.5em' }}>Add</button>
+              <button type="submit" disabled={scheduleAdding} style={{ padding: '0.5em 1.5em' }}>Add</button>
               <button type="button" onClick={onClose}>Cancel</button>
-              {menuError && <span style={{ color: 'red' }}>{menuError}</span>}
+              {scheduleError && <span style={{ color: 'red' }}>{scheduleError}</span>}
             </div>
           </form>
         </div>
@@ -58,4 +58,4 @@ const AddToMenuModal: React.FC<AddToMenuModalProps> = ({
   </>
 );
 
-export default AddToMenuModal;
+export default AddToScheduleModal;

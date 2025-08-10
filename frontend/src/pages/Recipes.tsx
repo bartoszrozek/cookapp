@@ -3,7 +3,7 @@ import "../App.css";
 import { fetchRecipes } from "../api";
 import RecipesTable from "../components/RecipesTable";
 import Modal from "../components/Modal";
-import AddToMenuModal from "../components/AddToMenuModal";
+import AddToScheduleModal from "../components/AddToScheduleModal";
 
 const Recipes: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -12,10 +12,10 @@ const Recipes: React.FC = () => {
   const [modalOpen, setModalOpen] = useState("none");
   const [selectedRecipe, setSelectedRecipe] = useState<any | null>(null);
   const modalInstructionsOpen: boolean = modalOpen === "instructions";
-  const modalAddToMenuOpen: boolean = modalOpen === "addToMenu";
-  const [menuAdding, setMenuAdding] = useState(false);
-  const [menuError, setMenuError] = useState<string | null>(null);
-  const [menuForm, setMenuForm] = useState({
+  const modalAddToScheduleOpen: boolean = modalOpen === "addToSchedule";
+  const [scheduleAdding, setScheduleAdding] = useState(false);
+  const [scheduleError, setScheduleError] = useState<string | null>(null);
+  const [scheduleForm, setScheduleForm] = useState({
     date: ''
   });
 
@@ -74,13 +74,13 @@ const Recipes: React.FC = () => {
         <Modal open={modalInstructionsOpen && !!selectedRecipe} onClose={() => setModalOpen("none")} title={selectedRecipe ? `Instructions for ${selectedRecipe.name}` : undefined}>
           <div style={{ whiteSpace: 'pre-line', marginBottom: 16 }}>{prepareInstruction(selectedRecipe)}</div>
         </Modal>
-        <AddToMenuModal
-          open={modalAddToMenuOpen && !!selectedRecipe}
+        <AddToScheduleModal
+          open={modalAddToScheduleOpen && !!selectedRecipe}
           onClose={() => setModalOpen("none")}
-          // onSubmit={handleAddToMenu}
-          menuAdding={menuAdding}
-          menuError={menuError}
-          menuForm={menuForm}
+          // onSubmit={handleAddToSchedule}
+          scheduleAdding={scheduleAdding}
+          scheduleError={scheduleError}
+          scheduleForm={scheduleForm}
           // onInputChange={handleFridgeInputChange}
           recipeName={selectedRecipe?.name}
         />

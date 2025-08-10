@@ -61,7 +61,7 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
                   </button>
                 </TableCell>
                 <TableCell>
-                  <button onClick={() => onButtonsClick(rec, "addToMenu")}>
+                  <button onClick={() => onButtonsClick(rec, "addToSchedule")}>
                     <FaCartPlus/>
                   </button>
                 </TableCell>

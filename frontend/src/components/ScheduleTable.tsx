@@ -1,10 +1,10 @@
 import React from "react";
 
-interface MenuTableProps {
-  menu: any[];
+interface ScheduleTableProps {
+  schedule: any[];
 }
 
-const MenuTable: React.FC<MenuTableProps> = ({ menu }) => (
+const ScheduleTable: React.FC<ScheduleTableProps> = ({ schedule }) => (
   <table className="full-width-table">
     <thead>
       <tr>
@@ -14,7 +14,7 @@ const MenuTable: React.FC<MenuTableProps> = ({ menu }) => (
       </tr>
     </thead>
     <tbody>
-      {menu.map((item) => (
+      {schedule.map((item) => (
         <tr key={item.id}>
           <td>{item.recipe_name}</td>
           <td>{item.date}</td>
@@ -25,4 +25,4 @@ const MenuTable: React.FC<MenuTableProps> = ({ menu }) => (
   </table>
 );
 
-export default MenuTable;
+export default ScheduleTable;

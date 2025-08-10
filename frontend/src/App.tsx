@@ -3,7 +3,7 @@ import { FaSnowflake, FaBook, FaListAlt, FaShoppingCart, FaCarrot } from "react-
 import TabBar from "./components/TabBar";
 import Fridge from "./pages/Fridge";
 import Recipes from "./pages/Recipes";
-import Menu from "./pages/Menu";
+import Schedule from "./pages/Schedule";
 import ShoppingList from "./pages/ShoppingList";
 import Ingredients from "./pages/Ingredients";
 import "./App.css";
@@ -11,7 +11,7 @@ import "./App.css";
 const TABS = [
   { label: "Ingredients", path: "/ingredients", icon: <FaCarrot /> },
   { label: "Recipes", path: "/recipes", icon: <FaBook /> },
-  { label: "Menu", path: "/menu", icon: <FaListAlt /> },
+  { label: "Schedule", path: "/schedule", icon: <FaListAlt /> },
   { label: "Fridge", path: "/fridge", icon: <FaSnowflake /> },
   { label: "Shopping List", path: "/shopping-list", icon: <FaShoppingCart /> },
 ];
@@ -39,7 +39,7 @@ function AppLayout() {
         <Routes>
           <Route path="/fridge" element={<Fridge />} />
           <Route path="/recipes" element={<Recipes />} />
-          <Route path="/menu" element={<Menu />} />
+          <Route path="/schedule" element={<Schedule />} />
           <Route path="/shopping-list" element={<ShoppingList />} />
           <Route path="/ingredients" element={<Ingredients />} />
           <Route path="*" element={<Navigate to="/ingredients" replace />} />
