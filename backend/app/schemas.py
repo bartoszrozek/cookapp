@@ -129,3 +129,14 @@ class Schedule(ScheduleBase):
     id: int
     class Config:
         orm_mode = True
+
+class MealTypeBase(BaseModel):
+    name: str
+
+class MealTypeCreate(MealTypeBase):
+    pass
+
+class MealType(MealTypeBase):
+    id: int
+    class Config:
+        orm_mode = True
