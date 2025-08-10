@@ -115,3 +115,17 @@ class FridgeLog(FridgeLogBase):
     timestamp: datetime
     class Config:
         orm_mode = True
+
+class ScheduleBase(BaseModel):
+    recipe_id: int
+    user_id: int
+    date: date
+    meal_type: int
+
+class ScheduleCreate(ScheduleBase):
+    pass
+
+class Schedule(ScheduleBase):
+    id: int
+    class Config:
+        orm_mode = True

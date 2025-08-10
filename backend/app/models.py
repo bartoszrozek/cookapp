@@ -72,3 +72,17 @@ class FridgeLog(Base):
     change_amount = Column(Float)
     action_type = Column(String)
     timestamp = Column(DateTime, default=time_now)
+
+class Schedule(Base):
+    __tablename__ = "schedule"
+    id = Column(Integer, primary_key=True)
+    recipe_id = Column(Integer, ForeignKey("recipes.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    date = Column(Date, nullable=False)
+    meal_type = Column(Integer, ForeignKey("meal_types.id"), nullable=False)
+
+class MealType(Base):
+    __tablename__ = "meal_types"
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False, unique=True)
+
