@@ -103,6 +103,7 @@ body {
   top: 1.5em;
   right: 1.5em;
   width: fit-content;
+  padding: 0.3em 0.6em
 }
 
 .modal-title {
