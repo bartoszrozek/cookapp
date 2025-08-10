@@ -1,5 +1,6 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
+import DivButton from "../components/DivButton";
 
 
 interface ModalProps {
@@ -15,12 +16,11 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children }) => {
     <div className="modal-overlay">
       <div className="modal-header">
         {title && <h3 className="modal-title">{title}</h3>}
-        <button
-          className="modal-close-button"
+        <DivButton
           onClick={() => onClose()}
         >
-          <IoMdClose size={16} />
-        </button>
+          <IoMdClose size={24} />
+        </DivButton>
       </div>
       <div className="modal" onClick={e => e.stopPropagation()}>
         {children}

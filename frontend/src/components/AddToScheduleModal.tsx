@@ -1,5 +1,6 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
+import DivButton from "../components/DivButton";
 
 interface AddToScheduleModalProps {
   open: boolean;
@@ -29,12 +30,11 @@ const AddToScheduleModal: React.FC<AddToScheduleModalProps> = ({
       <div className="modal-overlay">
         <div className="modal-header">
           <h3 className="modal-title">{recipeName ? `Add to Schedule: ${recipeName}` : 'Add to Schedule'}</h3>
-          <button
-            className="modal-close-button"
+          <DivButton
             onClick={() => onClose()}
           >
-            <IoMdClose size={16} />
-          </button>
+            <IoMdClose size={24} />
+          </DivButton>
         </div>
         <div className="modal" onClick={e => e.stopPropagation()}>
           <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

@@ -1,5 +1,6 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
+import DivButton from "../components/DivButton";
 
 interface AddToFridgeModalProps {
   open: boolean;
@@ -31,12 +32,11 @@ const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
       <div className="modal-overlay">
         <div className="modal-header">
           <h3 className="modal-title">{ingredientName ? `Add to Fridge: ${ingredientName}` : 'Add to Fridge'}</h3>
-          <button
-            className="modal-close-button"
+          <DivButton
             onClick={() => onClose()}
           >
-            <IoMdClose size={16} />
-          </button>
+            <IoMdClose size={24} />
+          </DivButton>
         </div>
         <div className="modal" onClick={e => e.stopPropagation()}>
           <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
