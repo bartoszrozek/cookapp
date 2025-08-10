@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..database import SessionLocal
+from typing import Optional
+from datetime import date
 
 router = APIRouter()
 
@@ -20,9 +22,29 @@ def create_schedule(schedule: schemas.ScheduleCreate, db: Session = Depends(get_
     db.refresh(db_schedule)
     return db_schedule
 
-@router.get("/schedule/", response_model=list[schemas.Schedule])
-def list_schedule(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return db.query(models.Schedule).offset(skip).limit(limit).all()
+@router.get("/schedule/", response_model=list[schemas.ScheduleGet])
+def list_schedule(
+    skip: int = 0,
+    limit: int = 100,
+    start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(models.Schedule, models.Recipe.name.label("recipe_name")).join(
+        models.Recipe, models.Schedule.recipe_id == models.Recipe.id
+    )
+    if start_date:
+        query = query.filter(models.Schedule.date >= start_date)
+    if end_date:
+        query = query.filter(models.Schedule.date <= end_date)
+    results = query.offset(skip).limit(limit).all()
+    # Merge recipe_name into the Schedule object for response
+    schedules: list[schemas.ScheduleGet] = []
+    for schedule, recipe_name in results:
+        schedule_dict = schedule.__dict__.copy()
+        schedule_dict["recipe_name"] = recipe_name
+        schedules.append(schedule_dict)
+    return schedules
 
 @router.get("/schedule/{schedule_id}", response_model=schemas.Schedule)
 def get_schedule(schedule_id: int, db: Session = Depends(get_db)):

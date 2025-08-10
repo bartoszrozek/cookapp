@@ -130,6 +130,10 @@ class Schedule(ScheduleBase):
     class Config:
         orm_mode = True
 
+class ScheduleGet(Schedule):
+    recipe_name: Optional[str] = None
+
+
 class MealTypeBase(BaseModel):
     name: str
 

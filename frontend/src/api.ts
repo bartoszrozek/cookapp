@@ -45,3 +45,23 @@ export async function deleteIngredient(id: number) {
   });
   if (!res.ok) throw new Error("Failed to delete ingredient");
 }
+
+export async function fetchMealTypes() {
+  const res = await fetch(`${API_BASE}/meal_types/`);
+  if (!res.ok) throw new Error("Failed to fetch meal types");
+  return res.json();
+}
+
+export async function fetchSchedule(startDate?: string, endDate?: string) {
+  const params = new URLSearchParams();
+  if (startDate) params.append("start_date", startDate);
+  if (endDate) params.append("end_date", endDate);
+
+  const url = params.toString()
+    ? `${API_BASE}/schedule/?${params.toString()}`
+    : `${API_BASE}/schedule/`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch schedule");
+  return res.json();
+}
