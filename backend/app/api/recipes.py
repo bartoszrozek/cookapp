@@ -14,7 +14,12 @@ def get_db():
 
 @router.post("/recipes/", response_model=schemas.Recipe)
 def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)):
-    db_recipe = models.Recipe(**recipe.model_dump())
+    breakpoint()
+    recipe_dict = recipe.model_dump()
+    # TODO: Handle adding ingredients to ingredient-recipe table
+    ingredients = recipe_dict.pop("ingredients", None) 
+    ingredients = [schemas.IngredientInRecipe(**ing.model_dump()) for ing in ingredients]
+    db_recipe = models.Recipe(**recipe_dict)
     db.add(db_recipe)
     db.commit()
     db.refresh(db_recipe)

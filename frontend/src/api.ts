@@ -65,3 +65,13 @@ export async function fetchSchedule(startDate?: string, endDate?: string) {
   if (!res.ok) throw new Error("Failed to fetch schedule");
   return res.json();
 }
+
+export async function addRecipe(recipe: any) {
+  const res = await fetch(`${API_BASE}/recipes/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(recipe)
+  });
+  if (!res.ok) throw new Error("Failed to add recipe");
+  return res.json();
+}

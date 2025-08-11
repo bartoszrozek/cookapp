@@ -20,6 +20,11 @@ class Ingredient(IngredientBase):
     class Config:
         orm_mode = True
 
+class IngredientInRecipe(BaseModel):
+    name: str
+    quantity: float
+    unit: str
+
 class RecipeBase(BaseModel):
     name: str
     description: Optional[str] = None
@@ -32,7 +37,7 @@ class RecipeBase(BaseModel):
     image_url: Optional[str] = None
 
 class RecipeCreate(RecipeBase):
-    pass
+    ingredients: list[IngredientInRecipe]
 
 class Recipe(RecipeBase):
     id: int
