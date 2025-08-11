@@ -70,8 +70,8 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
             ))}
             {emptyRows > 0 &&
               Array.from({ length: emptyRows }).map((_, idx) => (
-                <TableRow key={`empty-${idx}`} style={{ height: 59.8 }}>
-                  <TableCell colSpan={6} />
+                <TableRow key={`empty-${idx}`} style={{ height: 49.3 }}>
+                  <TableCell colSpan={8} />
                 </TableRow>
               ))}
           </TableBody>

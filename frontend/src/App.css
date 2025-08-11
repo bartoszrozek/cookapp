@@ -93,7 +93,7 @@ body {
 
 .modal {
   color: #fff;
-  padding: 2rem 2.5rem;
+  padding: 0rem 2.5rem;
   min-width: 320px;
   display: flex;
   flex-direction: column;
@@ -158,3 +158,6 @@ body {
   cursor: pointer;
 }
 
+button {
+  color: #002d5a;
+}

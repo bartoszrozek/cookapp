@@ -1,6 +1,6 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
-import DivButton from "../components/DivButton";
+import DivButton from "../DivButton";
 
 
 interface ModalProps {

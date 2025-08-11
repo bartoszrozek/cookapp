@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import { fetchRecipes } from "../api";
 import RecipesTable from "../components/RecipesTable";
-import Modal from "../components/Modal";
-import AddToScheduleModal from "../components/AddToScheduleModal";
+import Modal from "../components/modals/Modal";
+import AddToScheduleModal from "../components/modals/AddToScheduleModal";
+import AddRecipeModal from "../components/modals/AddRecipeModal";
 
 const Recipes: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -25,6 +26,7 @@ const Recipes: React.FC = () => {
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
+  
 
   const openModal = (recipe: string, modal: string) => {
     setSelectedRecipe(recipe);
@@ -44,7 +46,7 @@ const Recipes: React.FC = () => {
           <iframe
             src={recipe.instruction_link}
             title="Recipe Instructions"
-            style={{ width: "100%", height: "400px", border: "none" }}
+            style={{ width: "100%", height: "600px", border: "none" }}
           />
           <div style={{ marginTop: 8 }}>
             <button
@@ -65,6 +67,9 @@ const Recipes: React.FC = () => {
       <h2>Recipes</h2>
       <div className="tab-modal-container">
         <div className="tab-content">
+          <div className="button-group">
+            <button onClick={() => setModalOpen("addRecipe")} >Add Recipe</button>
+          </div>
           {recipes.length === 0 ? (
             <div>No recipes found.</div>
           ) : (
@@ -84,6 +89,14 @@ const Recipes: React.FC = () => {
           // onInputChange={handleFridgeInputChange}
           recipeName={selectedRecipe?.name}
         />
+        <AddRecipeModal
+          open={modalOpen === "addRecipe"}
+          onClose={() => setModalOpen("none")}
+          onAdd={(recipe) => {
+            setRecipes((prev) => [...prev, recipe]);
+            setModalOpen("none");
+          }}>
+        </AddRecipeModal>
       </div>
     </>
   );

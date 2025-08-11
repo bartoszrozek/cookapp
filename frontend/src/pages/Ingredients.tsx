@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import { fetchIngredients } from "../api";
 import IngredientsTable from "../components/IngredientsTable";
-import AddIngredientModal from "../components/AddIngredientModal";
-import AddToFridgeModal from "../components/AddToFridgeModal";
+import AddIngredientModal from "../components/modals/AddIngredientModal";
+import AddToFridgeModal from "../components/modals/AddToFridgeModal";
 
 const Ingredients: React.FC = () => {
   const [ingredients, setIngredients] = useState<any[]>([]);
