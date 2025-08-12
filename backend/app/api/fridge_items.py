@@ -16,6 +16,16 @@ def get_db():
 
 @router.post("/fridge_items/", response_model=schemas.FridgeItem)
 def create_fridge_item(item: schemas.FridgeItemCreate, db: Session = Depends(get_db)):
+    """
+    Create a new fridge item with the provided data.
+
+    Parameters:
+        fridge_item (schemas.FridgeItemCreate): The fridge item data to create (request body).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.FridgeItem: The created fridge item.
+    """
     db_item = models.FridgeItem(**item.model_dump())
     db.add(db_item)
     db.commit()
@@ -25,6 +35,17 @@ def create_fridge_item(item: schemas.FridgeItemCreate, db: Session = Depends(get
 
 @router.get("/fridge_items/", response_model=list[schemas.FridgeNamedItem])
 def list_fridge_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """
+    Retrieve a list of fridge items, paginated by skip and limit.
+
+    Parameters:
+        skip (int): Number of records to skip for pagination (query parameter, default 0).
+        limit (int): Maximum number of records to return (query parameter, default 100).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        list[models.FridgeItem]: List of fridge items.
+    """
     results = (
         db.query(
             models.FridgeItem,
@@ -54,7 +75,43 @@ def list_fridge_items(skip: int = 0, limit: int = 100, db: Session = Depends(get
 
 @router.get("/fridge_items/{item_id}", response_model=schemas.FridgeItem)
 def get_fridge_item(item_id: int, db: Session = Depends(get_db)):
+    """
+    Retrieve a single fridge item by its ID.
+
+    Parameters:
+        fridge_item_id (int): The ID of the fridge item to retrieve (path parameter).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.FridgeItem: The fridge item with all fields.
+
+    Raises:
+        HTTPException: 404 error if the fridge item is not found.
+    """
     item = db.query(models.FridgeItem).filter(models.FridgeItem.id == item_id).first()
     if not item:
         raise HTTPException(status_code=404, detail="Fridge item not found")
     return item
+
+
+@router.delete("/fridge_items/{fridge_item_id}", response_model=schemas.FridgeItem)
+def delete_fridge_item(fridge_item_id: int, db: Session = Depends(get_db)) -> models.FridgeItem:
+    """
+    Delete a fridge item by its ID.
+
+    Parameters:
+        fridge_item_id (int): The ID of the fridge item to delete (path parameter).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.FridgeItem: The deleted fridge item.
+
+    Raises:
+        HTTPException: 404 error if the fridge item is not found.
+    """
+    fridge_item = db.query(models.FridgeItem).filter(models.FridgeItem.id == fridge_item_id).first()
+    if not fridge_item:
+        raise HTTPException(status_code=404, detail="Fridge item not found")
+    db.delete(fridge_item)
+    db.commit()
+    return fridge_item

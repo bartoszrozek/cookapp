@@ -15,7 +15,17 @@ def get_db():
 
 
 @router.post("/recipes/", response_model=schemas.Recipe)
-def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)):
+def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)) -> models.Recipe:
+    """
+    Create a new recipe with the provided data.
+
+    Parameters:
+        recipe (schemas.RecipeCreate): The recipe data to create (request body).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.Recipe: The created recipe including all fields and relationships.
+    """
     breakpoint()
     recipe_dict = recipe.model_dump()
     # TODO: Handle adding ingredients to ingredient-recipe table
@@ -31,7 +41,18 @@ def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/recipes/", response_model=list[schemas.Recipe])
-def list_recipes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def list_recipes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[models.Recipe]:
+    """
+    Retrieve a list of recipes, paginated by skip and limit.
+
+    Parameters:
+        skip (int): Number of records to skip for pagination (query parameter, default 0).
+        limit (int): Maximum number of records to return (query parameter, default 100).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        list[models.Recipe]: List of recipes, each including related ingredients (name, quantity, unit).
+    """
     recipes = (
         db.query(models.Recipe)
         .options(
@@ -47,7 +68,20 @@ def list_recipes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 
 
 @router.get("/recipes/{recipe_id}", response_model=schemas.Recipe)
-def get_recipe(recipe_id: int, db: Session = Depends(get_db)):
+def get_recipe(recipe_id: int, db: Session = Depends(get_db)) -> models.Recipe:
+    """
+    Retrieve a single recipe by its ID.
+
+    Parameters:
+        recipe_id (int): The ID of the recipe to retrieve (path parameter).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.Recipe: The recipe with all fields and related ingredients (name, quantity, unit).
+
+    Raises:
+        HTTPException: 404 error if the recipe is not found.
+    """
     recipe = (
         db.query(models.Recipe)
         .options(

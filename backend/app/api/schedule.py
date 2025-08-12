@@ -15,7 +15,17 @@ def get_db():
         db.close()
 
 @router.post("/schedule/", response_model=schemas.Schedule)
-def create_schedule(schedule: schemas.ScheduleCreate, db: Session = Depends(get_db)):
+def create_schedule(schedule: schemas.ScheduleCreate, db: Session = Depends(get_db)) -> models.Schedule:
+    """
+    Create a new schedule entry with the provided data.
+
+    Parameters:
+        schedule (schemas.ScheduleCreate): The schedule data to create (request body).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.Schedule: The created schedule entry.
+    """
     db_schedule = models.Schedule(**schedule.model_dump())
     db.add(db_schedule)
     db.commit()
@@ -29,7 +39,20 @@ def list_schedule(
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
     db: Session = Depends(get_db)
-):
+) -> list[schemas.ScheduleGet]:
+    """
+    Retrieve a list of schedule entries, optionally filtered by date range, paginated by skip and limit.
+
+    Parameters:
+        skip (int): Number of records to skip for pagination (query parameter, default 0).
+        limit (int): Maximum number of records to return (query parameter, default 100).
+        start_date (Optional[date]): Filter for schedules on or after this date (query parameter).
+        end_date (Optional[date]): Filter for schedules on or before this date (query parameter).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        list[schemas.ScheduleGet]: List of schedule entries with recipe names.
+    """
     query = db.query(models.Schedule, models.Recipe.name.label("recipe_name")).join(
         models.Recipe, models.Schedule.recipe_id == models.Recipe.id
     )
@@ -47,14 +70,41 @@ def list_schedule(
     return schedules
 
 @router.get("/schedule/{schedule_id}", response_model=schemas.Schedule)
-def get_schedule(schedule_id: int, db: Session = Depends(get_db)):
+def get_schedule(schedule_id: int, db: Session = Depends(get_db)) -> models.Schedule:
+    """
+    Retrieve a single schedule entry by its ID.
+
+    Parameters:
+        schedule_id (int): The ID of the schedule entry to retrieve (path parameter).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.Schedule: The schedule entry with all fields.
+
+    Raises:
+        HTTPException: 404 error if the schedule entry is not found.
+    """
     schedule = db.query(models.Schedule).filter(models.Schedule.id == schedule_id).first()
     if not schedule:
         raise HTTPException(status_code=404, detail="Schedule not found")
     return schedule
 
 @router.put("/schedule/{schedule_id}", response_model=schemas.Schedule)
-def update_schedule(schedule_id: int, schedule_update: schemas.ScheduleCreate, db: Session = Depends(get_db)):
+def update_schedule(schedule_id: int, schedule_update: schemas.ScheduleCreate, db: Session = Depends(get_db)) -> models.Schedule:
+    """
+    Update an existing schedule entry by its ID.
+
+    Parameters:
+        schedule_id (int): The ID of the schedule entry to update (path parameter).
+        schedule_update (schemas.ScheduleCreate): The new schedule data (request body).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.Schedule: The updated schedule entry.
+
+    Raises:
+        HTTPException: 404 error if the schedule entry is not found.
+    """
     schedule = db.query(models.Schedule).filter(models.Schedule.id == schedule_id).first()
     if not schedule:
         raise HTTPException(status_code=404, detail="Schedule not found")
@@ -65,7 +115,20 @@ def update_schedule(schedule_id: int, schedule_update: schemas.ScheduleCreate, d
     return schedule
 
 @router.delete("/schedule/{schedule_id}", response_model=schemas.Schedule)
-def delete_schedule(schedule_id: int, db: Session = Depends(get_db)):
+def delete_schedule(schedule_id: int, db: Session = Depends(get_db)) -> models.Schedule:
+    """
+    Delete a schedule entry by its ID.
+
+    Parameters:
+        schedule_id (int): The ID of the schedule entry to delete (path parameter).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.Schedule: The deleted schedule entry.
+
+    Raises:
+        HTTPException: 404 error if the schedule entry is not found.
+    """
     schedule = db.query(models.Schedule).filter(models.Schedule.id == schedule_id).first()
     if not schedule:
         raise HTTPException(status_code=404, detail="Schedule not found")
