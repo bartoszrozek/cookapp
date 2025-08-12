@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text, ForeignKey, Date
+from sqlalchemy.orm import relationship
 from .database import Base
 from .helpers import time_now
 
@@ -21,7 +22,7 @@ class Recipe(Base):
     name = Column(String, nullable=False)
     description = Column(Text)
     instructions = Column(Text)
-    instruction_link = Column(String)  # NEW FIELD
+    instruction_link = Column(String)
     servings = Column(Integer)
     prep_time_min = Column(Integer)
     cook_time_min = Column(Integer)
@@ -29,6 +30,7 @@ class Recipe(Base):
     image_url = Column(String)
     created_at = Column(DateTime, default=time_now)
     updated_at = Column(DateTime, default=time_now, onupdate=time_now)
+    recipe_ingredients = relationship("RecipeIngredient", back_populates="recipe", cascade="all, delete-orphan")
 
 class RecipeIngredient(Base):
     __tablename__ = "recipe_ingredients"
@@ -38,6 +40,8 @@ class RecipeIngredient(Base):
     quantity = Column(Float, nullable=False)
     unit = Column(String, nullable=False)
     optional = Column(Boolean, default=False)
+    recipe = relationship("Recipe", back_populates="recipe_ingredients")
+    ingredient = relationship("Ingredient")
 
 class RecipeTag(Base):
     __tablename__ = "recipe_tags"

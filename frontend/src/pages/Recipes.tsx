@@ -22,7 +22,11 @@ const Recipes: React.FC = () => {
 
   useEffect(() => {
     fetchRecipes()
-      .then(setRecipes)
+      .then((data) => {
+      setRecipes(data);
+      // You can access the fetched recipes here as 'data'
+      // For example, console.log(data);
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
@@ -37,16 +41,37 @@ const Recipes: React.FC = () => {
   if (error) return <div style={{ color: "red" }}>Error: {error}</div>;
 
   const prepareInstruction = (recipe: any) => {
-    if (recipe?.instructions) {
-      return recipe.instructions
-    }
+    const ingredients = recipe?.recipe_ingredients?.length
+      ? (
+      <table style={{ marginBottom: 16, width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+        <tr>
+          <th style={{ borderBottom: "1px solid #ccc", textAlign: "left", padding: "4px" }}>Ingredient</th>
+          <th style={{ borderBottom: "1px solid #ccc", textAlign: "left", padding: "4px" }}>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        {recipe.recipe_ingredients.map((ing: any, idx: number) => (
+          <tr key={idx}>
+          <td style={{ padding: "4px" }}>{ing.ingredient.name}</td>
+          <td style={{ padding: "4px" }}>{`${ing.quantity} ${ing.unit}`}</td>
+          <td style={{ padding: "4px" }}>{}</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+      )
+      : null;
+
     if (recipe?.instruction_link) {
       return (
-        <div>
+        <>
+          {ingredients}
+          <div>
           <iframe
             src={recipe.instruction_link}
             title="Recipe Instructions"
-            style={{ width: "100%", height: "600px", border: "none" }}
+            style={{ width: "100%", height: "300px", border: "none" }}
           />
           <div style={{ marginTop: 8 }}>
             <button
@@ -57,9 +82,15 @@ const Recipes: React.FC = () => {
             </button>
           </div>
         </div>
+        </>
       );
     }
-    return "No description available!";
+
+    if (recipe?.instructions) {
+      return recipe.instructions
+    }
+
+    return ingredients;
   }
 
   return (

@@ -20,29 +20,9 @@ class Ingredient(IngredientBase):
     class Config:
         orm_mode = True
 
-class IngredientInRecipe(BaseModel):
-    name: str
-    quantity: float
-    unit: str
-
-class RecipeBase(BaseModel):
-    name: str
-    description: Optional[str] = None
-    instructions: Optional[str] = None
-    instruction_link: Optional[str] = None
-    servings: Optional[int] = None
-    prep_time_min: Optional[int] = None
-    cook_time_min: Optional[int] = None
-    difficulty: Optional[str] = None
-    image_url: Optional[str] = None
-
-class RecipeCreate(RecipeBase):
-    ingredients: list[IngredientInRecipe]
-
-class Recipe(RecipeBase):
+class IngredientShort(BaseModel):
     id: int
-    created_at: datetime
-    updated_at: datetime
+    name: str
     class Config:
         orm_mode = True
 
@@ -58,18 +38,34 @@ class RecipeIngredientCreate(RecipeIngredientBase):
 
 class RecipeIngredient(RecipeIngredientBase):
     id: int
+    ingredient: IngredientShort
     class Config:
         orm_mode = True
 
-class RecipeTagBase(BaseModel):
-    recipe_id: int
-    tag: str
+class RecipeBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+    instructions: Optional[str] = None
+    instruction_link: Optional[str] = None
+    servings: Optional[int] = None
+    prep_time_min: Optional[int] = None
+    cook_time_min: Optional[int] = None
+    difficulty: Optional[str] = None
+    image_url: Optional[str] = None
 
-class RecipeTagCreate(RecipeTagBase):
-    pass
+class IngredientInRecipe(BaseModel):
+    name: str
+    quantity: float
+    unit: str
 
-class RecipeTag(RecipeTagBase):
+class RecipeCreate(RecipeBase):
+    ingredients: list[IngredientInRecipe]
+
+class Recipe(RecipeBase):
     id: int
+    created_at: datetime
+    updated_at: datetime
+    recipe_ingredients: list[RecipeIngredient] = []
     class Config:
         orm_mode = True
 
