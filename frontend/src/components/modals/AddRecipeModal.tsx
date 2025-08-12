@@ -4,13 +4,10 @@ import { addRecipe, fetchIngredients } from "../../api";
 import { FaMinusCircle, FaPlusCircle} from "react-icons/fa";
 import DivButton from "../../components/DivButton";
 
-interface AddRecipeModalProps {
-    open: boolean;
-    onClose: () => void;
-    onAdd: (recipe: any) => void;
-}
+import type { Ingredient } from "../../types/apiTypes";
+import type { AddRecipeModalProps, AddRecipeState, Action, IngredientInputProps } from "../../types/AddRecipeModal.types";
 
-const initialState = {
+const initialState: AddRecipeState = {
     name: "",
     description: "",
     instruction_link: "",
@@ -21,11 +18,11 @@ const initialState = {
     difficulty: "easy",
     image_url: "",
     ingredients: [
-        { name: "", quantity: "", unit: "" }
+        { name: "", quantity: 0, unit: "" }
     ]
 };
 
-function reducer(state: typeof initialState, action: { type: string; value?: any; idx?: number; field?: string }) {
+function reducer(state: AddRecipeState, action: Action): AddRecipeState {
     switch (action.type) {
         case "reset":
             return initialState;
@@ -36,7 +33,7 @@ function reducer(state: typeof initialState, action: { type: string; value?: any
             return { ...state, ingredients: newIngredients };
         }
         case "add_ingredient":
-            return { ...state, ingredients: [...state.ingredients, { name: "", quantity: "", unit: "" }] };
+            return { ...state, ingredients: [...state.ingredients, { name: "", quantity: 0, unit: "" }] };
         case "remove_ingredient":
             return { ...state, ingredients: state.ingredients.filter((_, i) => i !== action.idx) };
         default:
@@ -46,7 +43,7 @@ function reducer(state: typeof initialState, action: { type: string; value?: any
 
 const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ open, onClose, onAdd }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [ingredients, setIngredients] = React.useState<{ id: number; name: string; category: string; default_unit: string }[]>([]);
+    const [ingredients, setIngredients] = React.useState<Ingredient[]>([]);
 
     useEffect(() => {
         fetchIngredients()
@@ -140,13 +137,6 @@ const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ open, onClose, onAdd })
     );
 };
 
-type IngredientInputProps = {
-    idx: number;
-    ingredient: { name: string; quantity: string; unit: string };
-    allIngredients: [{ id: number; name: string, category: string, default_unit: string }];
-    ingredientsLength: number;
-    dispatch: React.Dispatch<{ type: string; value?: any; idx?: number; field?: string }>;
-};
 
 const IngredientInput: React.FC<IngredientInputProps> = ({ idx, ingredient, allIngredients, ingredientsLength, dispatch }) => (
     <div className="ingredient-row">

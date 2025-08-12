@@ -1,8 +1,6 @@
 import React from "react";
 
-interface ShoppingListTableProps {
-  items: any[];
-}
+import type { ShoppingListTableProps } from "../types/ShoppingListTable.types";
 
 const ShoppingListTable: React.FC<ShoppingListTableProps> = ({ items }) => (
   <table className="full-width-table">

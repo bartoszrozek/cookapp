@@ -1,21 +1,7 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import DivButton from "../DivButton";
-
-interface AddToFridgeModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSubmit: (e: React.FormEvent) => void;
-  fridgeAdding: boolean;
-  fridgeError: string | null;
-  fridgeForm: {
-    quantity: string;
-    unit: string;
-    expiration_date: string;
-  };
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  ingredientName?: string;
-}
+import type { AddToFridgeModalProps } from "../../types/AddToFridgeModal.types";
 
 const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
   open,

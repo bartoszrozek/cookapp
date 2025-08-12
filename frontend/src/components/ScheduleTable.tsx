@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchMealTypes, fetchSchedule } from "../api";
 import { FaMinusCircle, FaPlusCircle, FaEye } from "react-icons/fa";
 import DivButton from "../components/DivButton";
-
-interface ScheduleTableProps {
-  weekStart: Date;
-  weekEnd: Date;
-}
+import type { ScheduleTableProps } from "../types/ScheduleTable.types";
 
 const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd }) => {
 

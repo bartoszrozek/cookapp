@@ -1,25 +1,26 @@
+import type { Ingredient, Recipe, FridgeItem, MealType, Schedule } from "./types/apiTypes";
 // API utility for CookApp
 const API_BASE = "http://localhost:8000";
 
-export async function fetchIngredients() {
+export async function fetchIngredients(): Promise<Ingredient[]> {
   const res = await fetch(`${API_BASE}/ingredients/`);
   if (!res.ok) throw new Error("Failed to fetch ingredients");
   return res.json();
 }
 
-export async function fetchRecipes() {
+export async function fetchRecipes(): Promise<Recipe[]> {
   const res = await fetch(`${API_BASE}/recipes/`);
   if (!res.ok) throw new Error("Failed to fetch recipes");
   return res.json();
 }
 
-export async function fetchFridgeItems() {
+export async function fetchFridgeItems(): Promise<FridgeItem[]> {
   const res = await fetch(`${API_BASE}/fridge_items/`);
   if (!res.ok) throw new Error("Failed to fetch fridge items");
   return res.json();
 }
 
-export async function addIngredient(ingredient: any) {
+export async function addIngredient(ingredient: Partial<Ingredient>): Promise<Ingredient> {
   const res = await fetch(`${API_BASE}/ingredients/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -29,7 +30,7 @@ export async function addIngredient(ingredient: any) {
   return res.json();
 }
 
-export async function addFridgeItem(item: any) {
+export async function addFridgeItem(item: Partial<FridgeItem>): Promise<FridgeItem> {
   const res = await fetch(`${API_BASE}/fridge_items/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -39,20 +40,20 @@ export async function addFridgeItem(item: any) {
   return res.json();
 }
 
-export async function deleteIngredient(id: number) {
+export async function deleteIngredient(id: number): Promise<void> {
   const res = await fetch(`${API_BASE}/ingredients/${id}/`, {
     method: "DELETE"
   });
   if (!res.ok) throw new Error("Failed to delete ingredient");
 }
 
-export async function fetchMealTypes() {
+export async function fetchMealTypes(): Promise<MealType[]> {
   const res = await fetch(`${API_BASE}/meal_types/`);
   if (!res.ok) throw new Error("Failed to fetch meal types");
   return res.json();
 }
 
-export async function fetchSchedule(startDate?: string, endDate?: string) {
+export async function fetchSchedule(startDate?: string, endDate?: string): Promise<Schedule[]> {
   const params = new URLSearchParams();
   if (startDate) params.append("start_date", startDate);
   if (endDate) params.append("end_date", endDate);
@@ -66,7 +67,7 @@ export async function fetchSchedule(startDate?: string, endDate?: string) {
   return res.json();
 }
 
-export async function addRecipe(recipe: any) {
+export async function addRecipe(recipe: Partial<Recipe>): Promise<Recipe> {
   const res = await fetch(`${API_BASE}/recipes/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -1,19 +1,7 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import DivButton from "../DivButton";
-
-interface AddToScheduleModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSubmit: (e: React.FormEvent) => void;
-  scheduleAdding: boolean;
-  scheduleError: string | null;
-  scheduleForm: {
-    date: string;
-  };
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  recipeName?: string;
-}
+import type { AddToScheduleModalProps } from "../../types/AddToScheduleModal.types";
 
 const AddToScheduleModal: React.FC<AddToScheduleModalProps> = ({
   open,

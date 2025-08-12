@@ -4,12 +4,13 @@ import { fetchIngredients } from "../api";
 import IngredientsTable from "../components/IngredientsTable";
 import AddIngredientModal from "../components/modals/AddIngredientModal";
 import AddToFridgeModal from "../components/modals/AddToFridgeModal";
+import type { Ingredient, NewIngredient, FridgeForm } from "./Ingredients.types";
 
 const Ingredients: React.FC = () => {
-  const [ingredients, setIngredients] = useState<any[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [newIngredient, setNewIngredient] = useState({
+  const [newIngredient, setNewIngredient] = useState<NewIngredient>({
     name: "",
     category: "",
     default_unit: "",
@@ -21,7 +22,7 @@ const Ingredients: React.FC = () => {
   const ingredientModalOpen = modalOpen == "ingredient"
   const fridgeModalOpen = modalOpen == "fridge";
   const [selectedIngredient, setSelectedIngredient] = useState<any | null>(null);
-  const [fridgeForm, setFridgeForm] = useState({
+  const [fridgeForm, setFridgeForm] = useState<FridgeForm>({
     quantity: '',
     unit: '',
     expiration_date: ''
