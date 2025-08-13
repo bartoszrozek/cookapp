@@ -76,3 +76,20 @@ export async function addRecipe(recipe: Partial<Recipe>): Promise<Recipe> {
   if (!res.ok) throw new Error("Failed to add recipe");
   return res.json();
 }
+
+export async function addScheduleDish(scheduleItem: Partial<Schedule>): Promise<Schedule> {
+  const res = await fetch(`${API_BASE}/schedule/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(scheduleItem)
+  });
+  if (!res.ok) throw new Error("Failed to add dish to schedule");
+  return res.json();
+}
+
+export async function deleteScheduleDish(id: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/schedule/${id}/`, {
+    method: "DELETE"
+  });
+  if (!res.ok) throw new Error("Failed to delete dish from schedule");
+}

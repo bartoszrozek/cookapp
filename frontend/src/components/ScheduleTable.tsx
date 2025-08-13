@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { fetchMealTypes, fetchSchedule } from "../api";
 import { FaMinusCircle, FaPlusCircle, FaEye } from "react-icons/fa";
 import DivButton from "../components/DivButton";
-import type { ScheduleTableProps } from "../types/ScheduleTable.types";
+import type { Schedule, ScheduleTableProps } from "../types/Schedule.types";
 
-const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd }) => {
+const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd, setModalOpen, setModalData, handleDeleteDish }) => {
 
-  const [schedule, setSchedule] = useState<any[]>([]);
+  const [schedule, setSchedule] = useState<Schedule[]>([]);
   useEffect(() => {
     fetchSchedule(weekStart.toISOString().slice(0, 10), weekEnd.toISOString().slice(0, 10))
       .then(setSchedule)
@@ -19,6 +19,11 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd }) => 
       .then(setMealTypes)
       .catch((e) => console.error("Failed to fetch meal types:", e));
   }, []);
+
+  const handleModal = (date: string, mealTypeId: number) => {
+    setModalOpen("addDishToSchedule");
+    setModalData({ date, mealTypeId });
+  };
 
   return (<table className="full-width-table">
     <thead>
@@ -49,14 +54,12 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd }) => 
                     <div>{recipe ? recipe.recipe_name : ""}</div>
                     {recipe ? (
                       <div>
-                        <DivButton tooltip = "See instructions"><FaEye /></DivButton>
-                        <DivButton tooltip = "Delete dish"><FaMinusCircle /></DivButton>
+                        <DivButton tooltip="See instructions"><FaEye /></DivButton>
+                        <DivButton tooltip="Delete dish" onClick={() => handleDeleteDish(recipe.id)}><FaMinusCircle /></DivButton>
                       </div>
                     ) : (
-                      <DivButton tooltip = "Add dish"><FaPlusCircle /></DivButton>
+                      <DivButton tooltip="Add dish" onClick={() => handleModal(date, mealType.id)}><FaPlusCircle /></DivButton>
                     )}
-
-
                   </div>
                 </td>
               );
