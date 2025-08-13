@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { ShoppingListTableProps } from "../types/ShoppingListTable.types";
+import type { ShoppingListTableProps } from "../types/ShoppingList.types";
 
 const ShoppingListTable: React.FC<ShoppingListTableProps> = ({ items }) => (
   <table className="full-width-table">

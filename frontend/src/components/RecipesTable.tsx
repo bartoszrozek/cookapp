@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import { FaEye, FaCartPlus} from "react-icons/fa";
 import DivButton from "../components/DivButton";
-import type { RecipesTableProps } from "../types/RecipesTable.types";
+import type { RecipesTableProps } from "../types/Recipes.types";
 
 const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) => {
   const [page, setPage] = React.useState(0);
