@@ -5,6 +5,7 @@ import RecipesTable from "../components/RecipesTable";
 import Modal from "../components/modals/Modal";
 import AddToScheduleModal from "../components/modals/AddToScheduleModal";
 import AddRecipeModal from "../components/modals/AddRecipeModal";
+import RecipeInstructionsModal from "../components/modals/RecipeInstructionsModal";
 
 const Recipes: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -40,58 +41,6 @@ const Recipes: React.FC = () => {
   if (loading) return <div>Loading recipes...</div>;
   if (error) return <div style={{ color: "red" }}>Error: {error}</div>;
 
-  const prepareInstruction = (recipe: any) => {
-    const ingredients = recipe?.recipe_ingredients?.length
-      ? (
-      <table style={{ marginBottom: 16, width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-        <tr>
-          <th style={{ borderBottom: "1px solid #ccc", textAlign: "left", padding: "4px" }}>Ingredient</th>
-          <th style={{ borderBottom: "1px solid #ccc", textAlign: "left", padding: "4px" }}>Quantity</th>
-        </tr>
-        </thead>
-        <tbody>
-        {recipe.recipe_ingredients.map((ing: any, idx: number) => (
-          <tr key={idx}>
-          <td style={{ padding: "4px" }}>{ing.ingredient.name}</td>
-          <td style={{ padding: "4px" }}>{`${ing.quantity} ${ing.unit}`}</td>
-          <td style={{ padding: "4px" }}>{}</td>
-          </tr>
-        ))}
-        </tbody>
-      </table>
-      )
-      : null;
-
-    if (recipe?.instruction_link) {
-      return (
-        <>
-          {ingredients}
-          <div>
-          <iframe
-            src={recipe.instruction_link}
-            title="Recipe Instructions"
-            style={{ width: "100%", height: "300px", border: "none" }}
-          />
-          <div style={{ marginTop: 8 }}>
-            <button
-              onClick={() => window.open(recipe.instruction_link, "_blank", "noopener,noreferrer")}
-              style={{ padding: "0.5em 1.5em" }}
-            >
-              Open in new tab
-            </button>
-          </div>
-        </div>
-        </>
-      );
-    }
-
-    if (recipe?.instructions) {
-      return recipe.instructions
-    }
-
-    return ingredients;
-  }
 
   return (
     <>
@@ -107,9 +56,11 @@ const Recipes: React.FC = () => {
             <RecipesTable recipes={recipes} onButtonsClick={openModal} />
           )}
         </div>
-        <Modal open={modalInstructionsOpen && !!selectedRecipe} onClose={() => setModalOpen("none")} title={selectedRecipe ? `Instructions for ${selectedRecipe.name}` : undefined}>
-          <div style={{ whiteSpace: 'pre-line', marginBottom: 16 }}>{prepareInstruction(selectedRecipe)}</div>
-        </Modal>
+        <RecipeInstructionsModal
+          open={modalInstructionsOpen && !!selectedRecipe}
+          onClose={() => setModalOpen("none")}
+          recipe={selectedRecipe}
+        />
         <AddToScheduleModal
           open={modalAddToScheduleOpen && !!selectedRecipe}
           onClose={() => setModalOpen("none")}
