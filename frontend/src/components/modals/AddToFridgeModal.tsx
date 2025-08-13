@@ -1,7 +1,7 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import DivButton from "../DivButton";
-import type { AddToFridgeModalProps } from "../../types/AddToFridgeModal.types";
+import type { AddToFridgeModalProps } from "../../types/Fridge.types";
 
 const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
   open,

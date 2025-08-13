@@ -1,7 +1,7 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import DivButton from "../DivButton";
-import type { AddToScheduleModalProps } from "../../types/AddToScheduleModal.types";
+import type { AddToScheduleModalProps } from "../../types/Schedule.types";
 
 const AddToScheduleModal: React.FC<AddToScheduleModalProps> = ({
   open,

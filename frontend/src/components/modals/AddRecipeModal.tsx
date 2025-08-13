@@ -5,7 +5,7 @@ import { FaMinusCircle, FaPlusCircle} from "react-icons/fa";
 import DivButton from "../../components/DivButton";
 
 import type { Ingredient } from "../../types/apiTypes";
-import type { AddRecipeModalProps, AddRecipeState, Action, IngredientInputProps } from "../../types/AddRecipeModal.types";
+import type { AddRecipeModalProps, AddRecipeState, Action, IngredientInputProps } from "../../types/Recipes.types";
 
 const initialState: AddRecipeState = {
     name: "",

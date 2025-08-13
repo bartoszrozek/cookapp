@@ -1,7 +1,7 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import DivButton from "../DivButton";
-import type { AddIngredientModalProps } from "../../types/AddIngredientModal.types";
+import type { AddIngredientModalProps } from "../../types/Ingredients.types";
 
 const AddIngredientModal: React.FC<AddIngredientModalProps> = ({
   open,

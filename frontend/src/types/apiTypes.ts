@@ -63,13 +63,4 @@ export interface MealType {
   name: string;
 }
 
-export interface Schedule {
-  id: number;
-  recipe_id: number;
-  user_id: number;
-  date: string;
-  meal_type: number;
-  recipe_name?: string;
-}
-
 export type AddRecipeState = Omit<Recipe, "id" | "created_at" | "updated_at" | "recipe_ingredients"> & { ingredients: IngredientInRecipe[] };

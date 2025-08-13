@@ -1,9 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../App.css";
 import ScheduleTable from "../components/ScheduleTable";
+import type { ModalDataType } from "../types/Schedule.types";
+import AddScheduleDishModal from "../components/modals/AddScheduleDishModal";
+import { fetchRecipes, addScheduleDish, deleteScheduleDish } from "../api";
+
 
 const Schedule: React.FC = () => {
   const [week, setWeek] = React.useState(0); // 0 = current week
+  const [modalOpen, setModalOpen] = React.useState("none");
+  const [modalData, setModalData] = React.useState<ModalDataType | null>(null);
+  const [recipes, setRecipes] = React.useState<any[]>([]);
+
+  useEffect(() => {
+    fetchRecipes()
+      .then((data) => {
+        setRecipes(data);
+      })
+  }, []);
+
+  // Callback for adding a dish
+  const handleAddDish = (recipeId: number, date: string, mealTypeId: number) => {
+    const scheduleItem = {
+      recipe_id: recipeId,
+      user_id: 1,
+      date,
+      meal_type: mealTypeId
+    };
+    console.log("Adding dish to schedule:", scheduleItem);
+    addScheduleDish(scheduleItem)
+      .then(() => {
+        setModalOpen("none");
+        setModalData(null);
+        fetchRecipes().then((data) => setRecipes(data));
+      })
+      .catch((e) => console.error("Failed to add dish to schedule:", e));
+  };
+
+  const handleDeleteDish = (scheduleId: number) => {
+    console.log("Removing dish from schedule with ID:", scheduleId);
+    if (!window.confirm("Are you sure you want to delete this dish from schedule?")) return;
+    // Call API to delete dish from schedule
+    // Assuming there's a function deleteScheduleDish(scheduleId)
+    deleteScheduleDish(scheduleId)
+      .then(() => {
+        fetchRecipes().then((data) => setRecipes(data));
+      })
+      .catch((e) => console.error("Failed to delete dish from schedule:", e));
+  };
 
   // Calculate start (Monday) and end (Sunday) dates for the week
   const getWeekRange = (weekOffset: number) => {
@@ -33,13 +77,21 @@ const Schedule: React.FC = () => {
       <h2>
         Schedule for week: {formatDate(monday)} – {formatDate(sunday)}
       </h2>
-
-      <div className="tab-content">
-        <ScheduleTable weekStart={monday} weekEnd={sunday} />
-        <div className="button-group">
-          <button onClick={handlePrevWeek}>Previous Week</button>
-          <button onClick={handleNextWeek}>Next Week</button>
+      <div className="tab-modal-container">
+        <div className="tab-content">
+          <ScheduleTable weekStart={monday} weekEnd={sunday} setModalOpen={setModalOpen} setModalData={setModalData} handleDeleteDish={handleDeleteDish} />
+          <div className="button-group">
+            <button onClick={handlePrevWeek}>Previous Week</button>
+            <button onClick={handleNextWeek}>Next Week</button>
+          </div>
         </div>
+        <AddScheduleDishModal open={modalOpen === "addDishToSchedule"}
+          onClose={() => setModalOpen("none")}
+          onSubmit={(recipe_id) => handleAddDish(recipe_id, modalData!.date, modalData!.mealTypeId)}
+          date={modalData?.date}
+          mealTypeId={modalData?.mealTypeId}
+          recipes={recipes}>
+        </AddScheduleDishModal>
       </div>
     </>
   );
