@@ -67,7 +67,7 @@ def list_recipes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
     return recipes
 
 
-@router.get("/recipes/{recipe_id}", response_model=schemas.Recipe)
+@router.get("/recipes/{recipe_id}/", response_model=schemas.Recipe)
 def get_recipe(recipe_id: int, db: Session = Depends(get_db)) -> models.Recipe:
     """
     Retrieve a single recipe by its ID.
@@ -95,3 +95,31 @@ def get_recipe(recipe_id: int, db: Session = Depends(get_db)) -> models.Recipe:
     if not recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")
     return recipe
+
+@router.put("/recipes/{recipe_id}/", response_model=schemas.Recipe)
+def update_recipe(recipe_id: int, recipe: schemas.RecipeCreate, db: Session = Depends(get_db)) -> models.Recipe:
+    """
+    Update an existing recipe by its ID.
+
+    Parameters:
+        recipe_id (int): The ID of the recipe to update (path parameter).
+        recipe (schemas.RecipeCreate): The new recipe data (request body).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.Recipe: The updated recipe including all fields and relationships.
+
+    Raises:
+        HTTPException: 404 error if the recipe is not found.
+    """
+    db_recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
+    if not db_recipe:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    
+    # Update the recipe fields
+    for key, value in recipe.model_dump().items():
+        setattr(db_recipe, key, value)
+    
+    db.commit()
+    db.refresh(db_recipe)
+    return db_recipe

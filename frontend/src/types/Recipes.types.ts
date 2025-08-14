@@ -6,10 +6,11 @@ export interface RecipesTableProps {
 }
 
 export interface AddRecipeModalProps {
+    type: "add" | "edit";
     open: boolean;
     onClose: () => void;
-    onAdd: (recipe: Recipe) => void;
-}
+    onSubmit: () => void;
+    recipe?: Recipe;}
 
 export type AddRecipeState = Omit<Recipe, "id" | "created_at" | "updated_at" | "recipe_ingredients"> & { ingredients: IngredientInRecipe[] };
 
@@ -22,9 +23,3 @@ export type IngredientInputProps = {
     ingredientsLength: number;
     dispatch: React.Dispatch<Action>;
 };
-
-export interface AddRecipeModalProps {
-    open: boolean;
-    onClose: () => void;
-    onAdd: (recipe: Recipe) => void;
-}

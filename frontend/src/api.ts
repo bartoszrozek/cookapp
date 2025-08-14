@@ -83,6 +83,16 @@ export async function addRecipe(recipe: Partial<Recipe>): Promise<Recipe> {
   return res.json();
 }
 
+export async function updateRecipe(id: number, recipe: Partial<Recipe>): Promise<Recipe> {
+  const res = await fetch(`${API_BASE}/recipes/${id}/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(recipe)
+  });
+  if (!res.ok) throw new Error("Failed to update recipe");
+  return res.json();
+}
+
 export async function addScheduleDish(scheduleItem: Partial<Schedule>): Promise<Schedule> {
   const res = await fetch(`${API_BASE}/schedule/`, {
     method: "POST",

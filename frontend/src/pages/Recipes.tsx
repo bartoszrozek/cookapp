@@ -25,14 +25,14 @@ const Recipes: React.FC = () => {
   useEffect(() => {
     fetchRecipes()
       .then((data) => {
-      setRecipes(data);
-      // You can access the fetched recipes here as 'data'
-      // For example, console.log(data);
+        setRecipes(data);
+        // You can access the fetched recipes here as 'data'
+        // For example, console.log(data);
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
-  
+
 
   const openModal = (recipe: string, modal: string) => {
     setSelectedRecipe(recipe);
@@ -51,12 +51,13 @@ const Recipes: React.FC = () => {
           <div className="button-group">
             <div>
               <Filter
-              elements={recipes}
-              setFilteredElements={setFilteredRecipes}
-              fields={["name"]}/>
+                elements={recipes}
+                setFilteredElements={setFilteredRecipes}
+                fields={["name"]} />
             </div>
             <div>
-              <button onClick={() => setModalOpen("addRecipe")} >Add Recipe</button>
+              <button onClick={() => {setSelectedRecipe(null);
+                setModalOpen("addRecipe")}} >Add Recipe</button>
             </div>
           </div>
           {filteredRecipes.length === 0 ? (
@@ -81,14 +82,17 @@ const Recipes: React.FC = () => {
           recipeName={selectedRecipe?.name}
         />
         <AddRecipeModal
+          type={selectedRecipe ? "edit" : "add"}
           open={modalOpen === "addRecipe"}
           onClose={() => setModalOpen("none")}
-          onAdd={(recipe) => {
-            setRecipes((prev) => [...prev, recipe]);
-            setModalOpen("none");
-          }}>
-        </AddRecipeModal>
-      </div>
+          onSubmit={() => fetchRecipes()
+            .then((data) => {
+              setRecipes(data);
+            })
+          }
+        recipe={selectedRecipe}>
+      </AddRecipeModal>
+    </div >
     </>
   );
 };

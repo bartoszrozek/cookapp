@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import Modal from "../modals/Modal";
-import { addRecipe, fetchIngredients } from "../../api";
+import { addRecipe, updateRecipe, fetchIngredients } from "../../api";
 import { FaMinusCircle, FaPlusCircle} from "react-icons/fa";
 import DivButton from "../../components/DivButton";
 
@@ -41,9 +41,38 @@ function reducer(state: AddRecipeState, action: Action): AddRecipeState {
     }
 }
 
-const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ open, onClose, onAdd }) => {
+const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ type, open, onClose, onSubmit, recipe}) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [ingredients, setIngredients] = React.useState<Ingredient[]>([]);
+    const [ingredients, setIngredients] = React.useState<Ingredient[]>();
+
+    // Populate state with recipe data only when recipe changes
+    useEffect(() => {
+        if (recipe === null) {
+            dispatch({ type: "reset", value: null });
+            return;
+        }
+        if (recipe) {
+            dispatch({ type: "reset", value: null });
+            Object.keys(recipe).forEach(key => {
+                if (key in initialState) {
+                    dispatch({ type: key as keyof AddRecipeState, value: recipe[key as keyof AddRecipeState] });
+                }
+                if (key === "recipe_ingredients") {
+                    const recipeIngredients = recipe.recipe_ingredients.map(ing => ({
+                        name: ing.ingredient.name,
+                        quantity: ing.quantity,
+                        unit: ing.unit
+                    }));
+                    recipeIngredients.forEach((ing, idx) => {
+                        dispatch({ type: "add_ingredient", value: null })
+                        dispatch({ type: "ingredient_change", idx, field: "name", value: ing.name });
+                        dispatch({ type: "ingredient_change", idx, field: "quantity", value: ing.quantity });
+                        dispatch({ type: "ingredient_change", idx, field: "unit", value: ing.unit });
+                    });
+                }
+            });
+        }
+    }, [recipe, type]);
 
     useEffect(() => {
         fetchIngredients()
@@ -59,8 +88,12 @@ const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ open, onClose, onAdd })
                 prep_time_min: Number(state.prep_time_min),
                 cook_time_min: Number(state.cook_time_min)
             };
-            const result = await addRecipe(newRecipe);
-            onAdd(result);
+            if (type === "edit" && recipe) {
+                await updateRecipe(recipe.id, newRecipe)
+            } else {
+                await addRecipe(newRecipe);
+            }
+            onSubmit();
             dispatch({ type: "reset", value: null });
             onClose();
         } catch (err) {
@@ -69,7 +102,7 @@ const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ open, onClose, onAdd })
     };
 
     return (
-        <Modal open={open} onClose={onClose} title="Add Recipe">
+        <Modal open={open} onClose={onClose} title={`${toTitleCase(type)} Recipe`}>
             <form className="modal-form" onSubmit={handleSubmit}>
                 <div>
                     <label>Name</label>
@@ -130,7 +163,7 @@ const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ open, onClose, onAdd })
                     </div>
                 </div>
                 <div style={{ marginTop: "1rem" }}>
-                    <button type="submit">Add</button>
+                    <button type="submit">Submit</button>
                 </div>
             </form>
         </Modal>
@@ -181,5 +214,16 @@ const IngredientInput: React.FC<IngredientInputProps> = ({ idx, ingredient, allI
         )}
     </div>
 );
+
+interface ToTitleCase {
+    (str: string): string;
+}
+
+const toTitleCase: ToTitleCase = (str) => {
+    return str.replace(
+        /\w\S*/g,
+        (text: string) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+    );
+};
 
 export default AddRecipeModal;

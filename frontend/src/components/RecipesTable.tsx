@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { FaEye, FaCartPlus} from "react-icons/fa";
+import { FaEye, FaCartPlus, FaEdit } from "react-icons/fa";
 import DivButton from "../components/DivButton";
 import type { RecipesTableProps } from "../types/Recipes.types";
 
@@ -104,6 +104,7 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
               </TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -117,6 +118,11 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
                 <TableCell>
                   <DivButton tooltip="See instructions" onClick={() => onButtonsClick(rec, "instructions")}> 
                     <FaEye size={20}/>
+                  </DivButton>
+                </TableCell>
+                <TableCell>
+                  <DivButton tooltip="Edit recipe" onClick={() => onButtonsClick(rec, "addRecipe")}> 
+                    <FaEdit  size={20}/>
                   </DivButton>
                 </TableCell>
                 <TableCell>
