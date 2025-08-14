@@ -17,9 +17,7 @@ const initialState: AddRecipeState = {
     cook_time_min: 0,
     difficulty: "easy",
     image_url: "",
-    ingredients: [
-        { name: "", quantity: 0, unit: "" }
-    ]
+    ingredients: []
 };
 
 function reducer(state: AddRecipeState, action: Action): AddRecipeState {
