@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import { fetchRecipes } from "../api";
 import RecipesTable from "../components/RecipesTable";
-import Modal from "../components/modals/Modal";
+import Filter from "../components/Filter";
 import AddToScheduleModal from "../components/modals/AddToScheduleModal";
 import AddRecipeModal from "../components/modals/AddRecipeModal";
 import RecipeInstructionsModal from "../components/modals/RecipeInstructionsModal";
 
 const Recipes: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
+  const [filteredRecipes, setFilteredRecipes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState("none");
@@ -48,12 +49,20 @@ const Recipes: React.FC = () => {
       <div className="tab-modal-container">
         <div className="tab-content">
           <div className="button-group">
-            <button onClick={() => setModalOpen("addRecipe")} >Add Recipe</button>
+            <div>
+              <Filter
+              elements={recipes}
+              setFilteredElements={setFilteredRecipes}
+              fields={["name"]}/>
+            </div>
+            <div>
+              <button onClick={() => setModalOpen("addRecipe")} >Add Recipe</button>
+            </div>
           </div>
-          {recipes.length === 0 ? (
+          {filteredRecipes.length === 0 ? (
             <div>No recipes found.</div>
           ) : (
-            <RecipesTable recipes={recipes} onButtonsClick={openModal} />
+            <RecipesTable recipes={filteredRecipes} onButtonsClick={openModal} />
           )}
         </div>
         <RecipeInstructionsModal

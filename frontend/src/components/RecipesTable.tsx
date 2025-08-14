@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import { FaEye, FaCartPlus} from "react-icons/fa";
 import DivButton from "../components/DivButton";
 import type { RecipesTableProps } from "../types/Recipes.types";
@@ -14,6 +15,8 @@ import type { RecipesTableProps } from "../types/Recipes.types";
 const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [sortBy, setSortBy] = React.useState<'name' | 'description' | 'servings' | 'prep_time_min' | 'cook_time_min'>('name');
+  const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -24,9 +27,28 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
     setPage(0);
   };
 
-  const pagedRecipes = recipes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const handleSort = (column: 'name' | 'description' | 'servings' | 'prep_time_min' | 'cook_time_min') => {
+    if (sortBy === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(column);
+      setSortOrder('asc');
+    }
+  };
 
-  // Calculate the number of empty rows to fill the table to a fixed height
+  const sortedRecipes = [...recipes].sort((a, b) => {
+    let aValue = a[sortBy] ?? '';
+    let bValue = b[sortBy] ?? '';
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      aValue = aValue.toLowerCase();
+      bValue = bValue.toLowerCase();
+    }
+    if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const pagedRecipes = sortedRecipes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   const emptyRows = rowsPerPage - pagedRecipes.length;
 
   return (
@@ -35,11 +57,51 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
         <Table className="full-width-table" stickyHeader aria-label="recipes table">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Servings</TableCell>
-              <TableCell>Prep Time</TableCell>
-              <TableCell>Cook Time</TableCell>
+              <TableCell sortDirection={sortBy === 'name' ? sortOrder : false}>
+                <TableSortLabel
+                  active={sortBy === 'name'}
+                  direction={sortBy === 'name' ? sortOrder : 'asc'}
+                  onClick={() => handleSort('name')}
+                >
+                  Name
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={sortBy === 'description' ? sortOrder : false}>
+                <TableSortLabel
+                  active={sortBy === 'description'}
+                  direction={sortBy === 'description' ? sortOrder : 'asc'}
+                  onClick={() => handleSort('description')}
+                >
+                  Description
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={sortBy === 'servings' ? sortOrder : false}>
+                <TableSortLabel
+                  active={sortBy === 'servings'}
+                  direction={sortBy === 'servings' ? sortOrder : 'asc'}
+                  onClick={() => handleSort('servings')}
+                >
+                  Servings
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={sortBy === 'prep_time_min' ? sortOrder : false}>
+                <TableSortLabel
+                  active={sortBy === 'prep_time_min'}
+                  direction={sortBy === 'prep_time_min' ? sortOrder : 'asc'}
+                  onClick={() => handleSort('prep_time_min')}
+                >
+                  Prep Time
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={sortBy === 'cook_time_min' ? sortOrder : false}>
+                <TableSortLabel
+                  active={sortBy === 'cook_time_min'}
+                  direction={sortBy === 'cook_time_min' ? sortOrder : 'asc'}
+                  onClick={() => handleSort('cook_time_min')}
+                >
+                  Cook Time
+                </TableSortLabel>
+              </TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -53,12 +115,12 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
                 <TableCell>{rec.prep_time_min} min</TableCell>
                 <TableCell>{rec.cook_time_min} min</TableCell>
                 <TableCell>
-                  <DivButton tooltip="See instructions" onClick={() => onButtonsClick(rec, "instructions")}>
+                  <DivButton tooltip="See instructions" onClick={() => onButtonsClick(rec, "instructions")}> 
                     <FaEye size={20}/>
                   </DivButton>
                 </TableCell>
                 <TableCell>
-                  <DivButton tooltip="Add to schedule" onClick={() => onButtonsClick(rec, "addToSchedule")}>
+                  <DivButton tooltip="Add to schedule" onClick={() => onButtonsClick(rec, "addToSchedule")}> 
                     <FaCartPlus  size={20}/>
                   </DivButton>
                 </TableCell>

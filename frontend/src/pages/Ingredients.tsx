@@ -4,7 +4,8 @@ import { fetchIngredients } from "../api";
 import IngredientsTable from "../components/IngredientsTable";
 import AddIngredientModal from "../components/modals/AddIngredientModal";
 import AddToFridgeModal from "../components/modals/AddToFridgeModal";
-import type { Ingredient, NewIngredient, FridgeForm } from "./Ingredients.types";
+import Filter from "../components/Filter";
+import type { Ingredient, NewIngredient, FridgeForm } from "../types/Ingredients.types";
 
 const Ingredients: React.FC = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -29,6 +30,8 @@ const Ingredients: React.FC = () => {
   });
   const [fridgeAdding, setFridgeAdding] = useState(false);
   const [fridgeError, setFridgeError] = useState<string | null>(null);
+
+  const [filteredIngredients, setFilteredIngredients] = useState<Ingredient[]>([]);
 
   useEffect(() => {
     fetchIngredients()
@@ -119,14 +122,20 @@ const Ingredients: React.FC = () => {
       <h2>Ingredients</h2>
       <div className="tab-modal-container">
         <div className="tab-content">
-          <div className="button-group">
-            <button onClick={() => setModalOpen("ingredient")} >Add Ingredient</button>
+          <div className="button-group" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Filter
+              elements={ingredients}
+              setFilteredElements={setFilteredIngredients}
+              fields={["name", "category"]}/>
+            <div>
+              <button onClick={() => setModalOpen("ingredient")} >Add Ingredient</button>
+            </div>
           </div>
           {ingredients.length === 0 ? (
             <div>No ingredients found.</div>
           ) : (
             <IngredientsTable
-              ingredients={ingredients}
+              ingredients={filteredIngredients}
               onAddToFridge={openFridgeModal}
               onDelete={handleDeleteIngredient}
             />
