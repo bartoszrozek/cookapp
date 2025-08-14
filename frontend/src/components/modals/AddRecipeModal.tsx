@@ -70,7 +70,7 @@ const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ open, onClose, onAdd })
 
     return (
         <Modal open={open} onClose={onClose} title="Add Recipe">
-            <form className="add-recipe-form" onSubmit={handleSubmit}>
+            <form className="modal-form" onSubmit={handleSubmit}>
                 <div>
                     <label>Name</label>
                     <input value={state.name} onChange={e => dispatch({ type: "name", value: e.target.value })} required />

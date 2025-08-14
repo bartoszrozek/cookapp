@@ -23,14 +23,16 @@ const AddScheduleDishModal: React.FC<AddScheduleDishModalProps> = ({ open, onClo
 
     return (
         <Modal open={open} onClose={onClose} title={`Add Dish for ${date} (Meal Type ${mealTypeId})`}>
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <label>Select Recipe</label>
-                <select value={selectedRecipe} onChange={e => setSelectedRecipe(e.target.value)} required>
-                    <option value="">Select a recipe</option>
-                    {recipes.map(recipe => (
-                        <option key={recipe.id} value={recipe.id}>{recipe.name}</option>
-                    ))}
-                </select>
+            <form className="modal-form" onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <div>
+                    <label>Select Recipe</label>
+                    <select value={selectedRecipe} onChange={e => setSelectedRecipe(e.target.value)} required>
+                        <option value="">Select a recipe</option>
+                        {recipes.map(recipe => (
+                            <option key={recipe.id} value={recipe.id}>{recipe.name}</option>
+                        ))}
+                    </select>
+                </div>
                 <button type="submit" style={{ padding: "0.5em 1.5em" }}>Add</button>
             </form>
         </Modal>
