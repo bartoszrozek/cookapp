@@ -76,7 +76,8 @@ body {
   background: rgba(255, 255, 255, 0.15);
 }
 
-.full-width-table span, .full-width-table svg {
+.full-width-table span:not(.redCell), 
+.full-width-table svg {
   color: #fdfdfd !important;
 }
 
@@ -91,6 +92,11 @@ body {
 
 .schedule-table th, .schedule-table td {
   padding: 1.25rem 1rem;
+}
+
+.redCell {
+  color: #ff4040 !important;
+  font-weight: bold;
 }
 
 .tab-modal-container {

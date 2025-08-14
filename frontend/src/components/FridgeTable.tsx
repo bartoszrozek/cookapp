@@ -92,7 +92,11 @@ const FridgeTable: React.FC<FridgeTableProps> = ({ items }) => {
                   <TableCell>{showName ? item.name : ""}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>{item.unit}</TableCell>
-                  <TableCell>{item.expiration_date}</TableCell>
+                  <TableCell>
+                    <span className={new Date(item.expiration_date) < new Date() ? 'redCell' : ''}>
+                      {item.expiration_date}
+                    </span>
+                  </TableCell>
                 </TableRow>
               );
             })}
