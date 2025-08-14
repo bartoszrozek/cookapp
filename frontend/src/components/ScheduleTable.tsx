@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { fetchMealTypes, fetchSchedule } from "../api";
+import { fetchMealTypes, fetchSchedule, fetchRecipeById } from "../api";
 import { FaMinusCircle, FaPlusCircle, FaEye } from "react-icons/fa";
 import DivButton from "../components/DivButton";
 import type { Schedule, ScheduleTableProps } from "../types/Schedule.types";
 
-const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd, setModalOpen, setModalData, handleDeleteDish }) => {
+const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd, setModalOpen, setModalData, handleDeleteDish, setSelectedRecipe }) => {
 
   const [schedule, setSchedule] = useState<Schedule[]>([]);
   useEffect(() => {
@@ -25,7 +25,16 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd, setMo
     setModalData({ date, mealTypeId });
   };
 
-  return (<table className="full-width-table">
+  const setRecipe = (recipe: Schedule) => {
+    fetchRecipeById(recipe.recipe_id)
+      .then((fullRecipe) => {
+        setSelectedRecipe(fullRecipe);
+        setModalOpen("instructions");
+      })
+      .catch((e) => console.error("Failed to fetch recipe:", e));
+  }
+
+  return (<table className="full-width-table schedule-table">
     <thead>
       <tr>
         <th style={{ textAlign: "center" }}>Date</th>
@@ -53,8 +62,8 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ weekStart, weekEnd, setMo
                   <div className={`schedule-field ${recipe ? "" : "schedule-field-center"}`}>
                     <div>{recipe ? recipe.recipe_name : ""}</div>
                     {recipe ? (
-                      <div>
-                        <DivButton tooltip="See instructions"><FaEye /></DivButton>
+                      <div className="schedule-field-buttons">
+                        <DivButton tooltip="See instructions" onClick={() => setRecipe(recipe)}><FaEye /></DivButton>
                         <DivButton tooltip="Delete dish" onClick={() => handleDeleteDish(recipe.id)}><FaMinusCircle /></DivButton>
                       </div>
                     ) : (

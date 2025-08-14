@@ -1,3 +1,5 @@
+import type { Recipe } from "../types/apiTypes";
+
 export interface Schedule {
   id: number;
   recipe_id: number;
@@ -13,6 +15,7 @@ export interface ScheduleTableProps {
   setModalOpen: React.Dispatch<React.SetStateAction<string>>;
   setModalData: (data: ModalDataType) => void;
   handleDeleteDish: (scheduleId: number) => void;
+  setSelectedRecipe: (data: Recipe | null) => void;
 }
 
 export interface ModalDataType {

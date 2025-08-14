@@ -14,6 +14,12 @@ export async function fetchRecipes(): Promise<Recipe[]> {
   return res.json();
 }
 
+export async function fetchRecipeById(id: number): Promise<Recipe> {
+  const res = await fetch(`${API_BASE}/recipes/${id}/`);
+  if (!res.ok) throw new Error("Failed to fetch recipe");
+  return res.json();
+}
+
 export async function fetchFridgeItems(): Promise<FridgeItem[]> {
   const res = await fetch(`${API_BASE}/fridge_items/`);
   if (!res.ok) throw new Error("Failed to fetch fridge items");

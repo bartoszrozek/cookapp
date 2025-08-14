@@ -31,7 +31,7 @@ def create_ingredient(ingredient: schemas.IngredientCreate, db: Session = Depend
     return db_ingredient
 
 @router.get("/ingredients/", response_model=list[schemas.Ingredient])
-def list_ingredients(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[models.Ingredient]:
+def list_ingredients(skip: int = 0, limit: int = 200, db: Session = Depends(get_db)) -> list[models.Ingredient]:
     """
     Retrieve a list of ingredients, paginated by skip and limit.
 

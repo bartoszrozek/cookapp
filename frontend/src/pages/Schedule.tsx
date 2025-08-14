@@ -2,15 +2,20 @@ import React, { useEffect } from "react";
 import "../App.css";
 import ScheduleTable from "../components/ScheduleTable";
 import type { ModalDataType } from "../types/Schedule.types";
+import type { Recipe } from "../types/apiTypes";
 import AddScheduleDishModal from "../components/modals/AddScheduleDishModal";
 import { fetchRecipes, addScheduleDish, deleteScheduleDish } from "../api";
+import RecipeInstructionsModal from "../components/modals/RecipeInstructionsModal";
 
 
 const Schedule: React.FC = () => {
   const [week, setWeek] = React.useState(0); // 0 = current week
   const [modalOpen, setModalOpen] = React.useState("none");
   const [modalData, setModalData] = React.useState<ModalDataType | null>(null);
+  const [selectedRecipe, setSelectedRecipe] = React.useState<Recipe | null>(null);
   const [recipes, setRecipes] = React.useState<any[]>([]);
+
+  const modalInstructionsOpen = modalOpen === "instructions";
 
   useEffect(() => {
     fetchRecipes()
@@ -38,10 +43,8 @@ const Schedule: React.FC = () => {
   };
 
   const handleDeleteDish = (scheduleId: number) => {
-    console.log("Removing dish from schedule with ID:", scheduleId);
     if (!window.confirm("Are you sure you want to delete this dish from schedule?")) return;
     // Call API to delete dish from schedule
-    // Assuming there's a function deleteScheduleDish(scheduleId)
     deleteScheduleDish(scheduleId)
       .then(() => {
         fetchRecipes().then((data) => setRecipes(data));
@@ -79,7 +82,14 @@ const Schedule: React.FC = () => {
       </h2>
       <div className="tab-modal-container">
         <div className="tab-content">
-          <ScheduleTable weekStart={monday} weekEnd={sunday} setModalOpen={setModalOpen} setModalData={setModalData} handleDeleteDish={handleDeleteDish} />
+          <ScheduleTable
+            weekStart={monday}
+            weekEnd={sunday}
+            setModalOpen={setModalOpen}
+            setModalData={setModalData}
+            handleDeleteDish={handleDeleteDish}
+            setSelectedRecipe={setSelectedRecipe}
+          />
           <div className="button-group">
             <button onClick={handlePrevWeek}>Previous Week</button>
             <button onClick={handleNextWeek}>Next Week</button>
@@ -92,6 +102,11 @@ const Schedule: React.FC = () => {
           mealTypeId={modalData?.mealTypeId}
           recipes={recipes}>
         </AddScheduleDishModal>
+        <RecipeInstructionsModal
+          open={modalInstructionsOpen && !!selectedRecipe}
+          onClose={() => setModalOpen("none")}
+          recipe={selectedRecipe}
+        />
       </div>
     </>
   );
