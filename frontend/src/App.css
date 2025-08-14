@@ -225,3 +225,8 @@ button {
   gap: 1rem;
   margin-bottom: 0.5rem;
 }
+
+.ingredient-row > div {
+  display: flex;
+  gap: 2rem
+}
