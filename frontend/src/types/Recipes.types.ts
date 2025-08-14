@@ -3,6 +3,7 @@ import type { Recipe, Ingredient, IngredientInRecipe } from "./apiTypes";
 export interface RecipesTableProps {
   recipes: any[];
   onButtonsClick: (recipe: string, modal: string) => void;
+  onSubmit: () => void;
 }
 
 export interface AddRecipeModalProps {

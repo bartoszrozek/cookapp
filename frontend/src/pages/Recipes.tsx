@@ -56,14 +56,23 @@ const Recipes: React.FC = () => {
                 fields={["name"]} />
             </div>
             <div>
-              <button onClick={() => {setSelectedRecipe(null);
-                setModalOpen("addRecipe")}} >Add Recipe</button>
+              <button onClick={() => {
+                setSelectedRecipe(null);
+                setModalOpen("addRecipe")
+              }} >Add Recipe</button>
             </div>
           </div>
           {filteredRecipes.length === 0 ? (
             <div>No recipes found.</div>
           ) : (
-            <RecipesTable recipes={filteredRecipes} onButtonsClick={openModal} />
+            <RecipesTable
+              recipes={filteredRecipes}
+              onButtonsClick={openModal}
+              onSubmit={() => fetchRecipes()
+                .then((data) => {
+                  setRecipes(data);
+                })
+              } />
           )}
         </div>
         <RecipeInstructionsModal
@@ -90,9 +99,9 @@ const Recipes: React.FC = () => {
               setRecipes(data);
             })
           }
-        recipe={selectedRecipe}>
-      </AddRecipeModal>
-    </div >
+          recipe={selectedRecipe}>
+        </AddRecipeModal>
+      </div >
     </>
   );
 };

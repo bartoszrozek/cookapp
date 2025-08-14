@@ -8,11 +8,13 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { FaEye, FaCartPlus, FaEdit } from "react-icons/fa";
+import { FaEye, FaCartPlus, FaEdit, FaTrashAlt } from "react-icons/fa";
 import DivButton from "../components/DivButton";
 import type { RecipesTableProps } from "../types/Recipes.types";
+import type { Recipe } from "../types/apiTypes";
+import { deleteRecipe } from "../api";
 
-const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) => {
+const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick, onSubmit }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortBy, setSortBy] = React.useState<'name' | 'description' | 'servings' | 'prep_time_min' | 'cook_time_min'>('name');
@@ -35,6 +37,16 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
       setSortOrder('asc');
     }
   };
+
+  const onDeleteRecipe = (recipe: Recipe) => {
+    if (window.confirm(`Are you sure you want to delete the recipe "${recipe.name}"?`)) {
+      deleteRecipe(recipe.id)
+        .then(() => {
+          onSubmit();
+        })
+        .catch((e) => alert(`Failed to add recipe: ${e}. Please try again.`));
+    }
+  }
 
   const sortedRecipes = [...recipes].sort((a, b) => {
     let aValue = a[sortBy] ?? '';
@@ -105,6 +117,7 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
               <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -126,6 +139,11 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
                   </DivButton>
                 </TableCell>
                 <TableCell>
+                  <DivButton tooltip="Delete recipe" onClick={() => onDeleteRecipe(rec)}> 
+                    <FaTrashAlt  size={20}/>
+                  </DivButton>
+                </TableCell>
+                <TableCell>
                   <DivButton tooltip="Add to schedule" onClick={() => onButtonsClick(rec, "addToSchedule")}> 
                     <FaCartPlus  size={20}/>
                   </DivButton>
@@ -135,7 +153,7 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick }) 
             {emptyRows > 0 &&
               Array.from({ length: emptyRows }).map((_, idx) => (
                 <TableRow key={`empty-${idx}`} style={{ height: 49.3 }}>
-                  <TableCell colSpan={8} />
+                  <TableCell colSpan={10} />
                 </TableRow>
               ))}
           </TableBody>

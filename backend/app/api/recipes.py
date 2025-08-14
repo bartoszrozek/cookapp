@@ -123,3 +123,26 @@ def update_recipe(recipe_id: int, recipe: schemas.RecipeCreate, db: Session = De
     db.commit()
     db.refresh(db_recipe)
     return db_recipe
+
+@router.delete("/recipes/{recipe_id}/", response_model=schemas.Recipe)
+def delete_recipe(recipe_id: int, db: Session = Depends(get_db)) -> models.Recipe:
+    """
+    Delete a recipe by its ID.
+
+    Parameters:
+        recipe_id (int): The ID of the recipe to delete (path parameter).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.Recipe: The deleted recipe.
+
+    Raises:
+        HTTPException: 404 error if the recipe is not found.
+    """
+    db_recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
+    if not db_recipe:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    
+    db.delete(db_recipe)
+    db.commit()
+    return db_recipe

@@ -93,6 +93,13 @@ export async function updateRecipe(id: number, recipe: Partial<Recipe>): Promise
   return res.json();
 }
 
+export async function deleteRecipe(id: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/recipes/${id}/`, {
+    method: "DELETE"
+  });
+  if (!res.ok) throw new Error("Failed to delete recipe");
+}
+
 export async function addScheduleDish(scheduleItem: Partial<Schedule>): Promise<Schedule> {
   const res = await fetch(`${API_BASE}/schedule/`, {
     method: "POST",
