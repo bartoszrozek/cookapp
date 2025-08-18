@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text, ForeignKey, Date, CheckConstraint
 from sqlalchemy.orm import relationship
 from .database import Base
 from .helpers import time_now
@@ -29,7 +29,7 @@ class Ingredient(Base):
     name = Column(String, nullable=False)
     category = Column(String)
     default_unit = Column(String)
-    calories_per_unit = Column(Float)
+    calories_per_unit: Column[float] = Column(Float) # explicit type needed because of pylance bug
     is_perishable = Column(Boolean, default=True)
     shelf_life_days = Column(Integer)
     created_at = Column(DateTime, default=time_now)
@@ -97,7 +97,10 @@ class RecipeIngredient(Base):
     id = Column(Integer, primary_key=True)
     recipe_id = Column(Integer, ForeignKey("recipes.id"), nullable=False)
     ingredient_id = Column(Integer, ForeignKey("ingredients.id"), nullable=False)
-    quantity = Column(Float, nullable=False)
+    quantity: Column[float] = Column(Float, nullable=False) # explicit type needed because of pylance bug
+    __table_args__ = (
+        CheckConstraint('quantity > 0', name='check_quantity_positive'),
+    )
     unit = Column(String, nullable=False)
     optional = Column(Boolean, default=False)
     recipe = relationship("Recipe", back_populates="recipe_ingredients")
@@ -162,7 +165,7 @@ class FridgeItem(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     ingredient_id = Column(Integer, ForeignKey("ingredients.id"), nullable=False)
-    quantity = Column(Float, nullable=False)
+    quantity: Column[float] = Column(Float, nullable=False) # explicit type needed because of pylance bug
     unit = Column(String, nullable=False)
     expiration_date = Column(Date)
     added_at = Column(DateTime, default=time_now)
@@ -186,7 +189,7 @@ class FridgeLog(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     ingredient_id = Column(Integer, ForeignKey("ingredients.id"), nullable=False)
-    change_amount = Column(Float)
+    change_amount: Column[float] = Column(Float) # explicit type needed because of pylance bug
     action_type = Column(String)
     timestamp = Column(DateTime, default=time_now)
 

@@ -40,6 +40,19 @@ class IngredientShort(BaseModel):
     class Config:
         orm_mode = True
 
+class ShoppingListItem(BaseModel):
+    """
+    Schema for Shopping Ingredient, used in shopping list.
+    Inherits all fields from IngredientShort and adds quantity and unit.
+    """
+    id: int = Field(..., description="ID of the ingredient.")
+    ingredient_name: str = Field(..., description="Name of the ingredient.")
+    quantity: float = Field(..., description="Quantity of the ingredient.")
+    unit: str = Field(..., description="Unit of measurement.")
+    
+    class Config:
+        orm_mode = True
+
 class RecipeIngredientBase(BaseModel):
     """
     Base schema for RecipeIngredient association.

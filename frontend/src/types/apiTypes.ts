@@ -63,4 +63,11 @@ export interface MealType {
   name: string;
 }
 
+export interface ShoppingListItem {
+    id: number;
+    ingredient_name: string;
+    quantity: number;
+    unit: string;
+}
+
 export type AddRecipeState = Omit<Recipe, "id" | "created_at" | "updated_at" | "recipe_ingredients"> & { ingredients: IngredientInRecipe[] };

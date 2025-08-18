@@ -1,14 +1,12 @@
+import type { FridgeItem } from "../types/apiTypes";
+import type { Ingredient } from "./Ingredients.types";
+
 export interface AddToFridgeModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (e: React.FormEvent) => void;
-  fridgeAdding: boolean;
-  fridgeError: string | null;
-  fridgeForm: {
-    quantity: string;
-    unit: string;
-    expiration_date: string;
-  };
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  ingredientName?: string;
+  ingredient: Ingredient;
+  defaultQuantity?: number;
+  defaultUnit?: string;
 }
+
+export type AddFridgeItemState = Omit<FridgeItem, "id" | "created_at" | "updated_at" | "user_id">;

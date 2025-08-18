@@ -21,12 +21,20 @@ const Fridge: React.FC = () => {
   return (
     <>
       <h2>Fridge</h2>
-      <div className="tab-content">
-        {items.length === 0 ? (
-          <div>No items in fridge.</div>
-        ) : (
-          <FridgeTable items={items} />
-        )}
+      <div className="tab-modal-container">
+        <div className="tab-content">
+          {items.length === 0 ? (
+            <div>No items in fridge.</div>
+          ) : (
+            <FridgeTable
+              items={items}
+              onSubmit={() => {
+                fetchFridgeItems()
+                  .then(setItems)
+              }}
+            />
+          )}
+        </div>
       </div>
     </>
   );

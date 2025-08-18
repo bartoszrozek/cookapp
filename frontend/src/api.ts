@@ -1,4 +1,4 @@
-import type { Ingredient, Recipe, FridgeItem, MealType, Schedule } from "./types/apiTypes";
+import type { Ingredient, Recipe, FridgeItem, MealType, Schedule, ShoppingListItem } from "./types/apiTypes";
 // API utility for CookApp
 const API_BASE = "http://localhost:8000";
 
@@ -43,6 +43,23 @@ export async function addFridgeItem(item: Partial<FridgeItem>): Promise<FridgeIt
     body: JSON.stringify(item)
   });
   if (!res.ok) throw new Error("Failed to add item to fridge");
+  return res.json();
+}
+
+export async function deleteFridgeItem(id: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/fridge_items/${id}/`, {
+    method: "DELETE"
+  });
+  if (!res.ok) throw new Error("Failed to delete fridge item");
+}
+
+export async function updateFridgeItem(id: number, item: Partial<FridgeItem>): Promise<FridgeItem> {
+  const res = await fetch(`${API_BASE}/fridge_items/${id}/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(item)
+  });
+  if (!res.ok) throw new Error("Failed to update fridge item");
   return res.json();
 }
 
@@ -115,4 +132,18 @@ export async function deleteScheduleDish(id: number): Promise<void> {
     method: "DELETE"
   });
   if (!res.ok) throw new Error("Failed to delete dish from schedule");
+}
+
+export async function fetchShoppingList(startDate?: string, endDate?: string): Promise<ShoppingListItem[]> {
+  const params = new URLSearchParams();
+  if (startDate) params.append("start_date", startDate);
+  if (endDate) params.append("end_date", endDate);
+
+  const url = params.toString()
+    ? `${API_BASE}/shopping_list/?${params.toString()}`
+    : `${API_BASE}/shopping_list/`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch shopping list");
+  return res.json();
 }

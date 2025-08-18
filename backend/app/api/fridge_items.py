@@ -95,7 +95,9 @@ def get_fridge_item(item_id: int, db: Session = Depends(get_db)):
 
 
 @router.delete("/fridge_items/{fridge_item_id}", response_model=schemas.FridgeItem)
-def delete_fridge_item(fridge_item_id: int, db: Session = Depends(get_db)) -> models.FridgeItem:
+def delete_fridge_item(
+    fridge_item_id: int, db: Session = Depends(get_db)
+) -> models.FridgeItem:
     """
     Delete a fridge item by its ID.
 
@@ -109,9 +111,50 @@ def delete_fridge_item(fridge_item_id: int, db: Session = Depends(get_db)) -> mo
     Raises:
         HTTPException: 404 error if the fridge item is not found.
     """
-    fridge_item = db.query(models.FridgeItem).filter(models.FridgeItem.id == fridge_item_id).first()
+    fridge_item = (
+        db.query(models.FridgeItem)
+        .filter(models.FridgeItem.id == fridge_item_id)
+        .first()
+    )
     if not fridge_item:
         raise HTTPException(status_code=404, detail="Fridge item not found")
     db.delete(fridge_item)
     db.commit()
     return fridge_item
+
+
+@router.put("/fridge_items/{fridge_item_id}", response_model=schemas.FridgeItem)
+def update_fridge_item(
+    fridge_item_id: int,
+    fridge_item: schemas.FridgeItemCreate,
+    db: Session = Depends(get_db),
+) -> models.FridgeItem:
+    """
+    Update an existing fridge item by its ID.
+
+    Parameters:
+        fridge_item_id (int): The ID of the fridge item to update (path parameter).
+        fridge_item (schemas.FridgeItemCreate): The new fridge item data (request body).
+        db (Session): SQLAlchemy database session (provided by dependency injection).
+
+    Returns:
+        models.FridgeItem: The updated fridge item.
+
+    Raises:
+        HTTPException: 404 error if the fridge item is not found.
+    """
+    db_fridge_item = (
+        db.query(models.FridgeItem)
+        .filter(models.FridgeItem.id == fridge_item_id)
+        .first()
+    )
+    if not db_fridge_item:
+        raise HTTPException(status_code=404, detail="Fridge item not found")
+
+    # Update the fridge item fields
+    for key, value in fridge_item.model_dump().items():
+        setattr(db_fridge_item, key, value)
+
+    db.commit()
+    db.refresh(db_fridge_item)
+    return db_fridge_item

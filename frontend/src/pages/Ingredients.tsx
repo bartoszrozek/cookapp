@@ -81,29 +81,6 @@ const Ingredients: React.FC = () => {
     });
   };
 
-  const handleAddToFridge = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFridgeAdding(true);
-    setFridgeError(null);
-    try {
-      const { quantity, unit, expiration_date } = fridgeForm;
-      const ingredient_id = selectedIngredient.id;
-      // Optionally, set user_id if your backend requires it (e.g., user_id: 1)
-      await import("../api").then(m => m.addFridgeItem({
-        ingredient_id,
-        user_id: 1, // Replace with actual user ID if needed
-        quantity: parseFloat(quantity),
-        unit,
-        expiration_date
-      }));
-      setModalOpen("none");
-    } catch (err: any) {
-      setFridgeError(err.message || 'Failed to add to fridge');
-    } finally {
-      setFridgeAdding(false);
-    }
-  };
-
   const handleDeleteIngredient = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this ingredient?")) return;
     try {
@@ -153,12 +130,7 @@ const Ingredients: React.FC = () => {
         <AddToFridgeModal
           open={fridgeModalOpen && !!selectedIngredient}
           onClose={() => setModalOpen("none")}
-          onSubmit={handleAddToFridge}
-          fridgeAdding={fridgeAdding}
-          fridgeError={fridgeError}
-          fridgeForm={fridgeForm}
-          onInputChange={handleFridgeInputChange}
-          ingredientName={selectedIngredient?.name}
+          ingredient={selectedIngredient}
         />
       </div>
     </>
