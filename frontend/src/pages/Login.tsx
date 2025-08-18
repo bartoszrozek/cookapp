@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import '../styles/_base.scss';
 
 export default function Login() {
   const { login } = useAuth();
@@ -18,7 +19,7 @@ export default function Login() {
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className='modal-form' onSubmit={onSubmit}>
       <div>
         <label>Email</label>
         <input value={email} onChange={e => setEmail(e.target.value)} />

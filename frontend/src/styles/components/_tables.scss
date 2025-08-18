@@ -1,0 +1,90 @@
+@use "../_variables" as v;
+
+.MuiPaper-root {
+  background: none !important;
+  color: v.$color-text !important;
+  --Paper-shadow: none !important;
+  width: 100% !important;
+  font-family: Inter;
+
+  th,
+  td,
+  tr {
+    font-size: v.$font-size-base;
+  }
+}
+
+.MuiTablePagination-root {
+  color: v.$color-text !important;
+}
+
+.MuiTableCell-root {
+  > input,
+  > select,
+  > textarea {
+    font-size: v.$font-size-base;
+    border-radius: v.$radius-sm;
+    border: none;
+    background: v.$color-surface;
+    color: v.$color-text;
+    padding: v.$gutter-sm;
+    width: 100%;
+  }
+}
+
+.full-width-table {
+  width: 100%;
+  color: v.$color-text !important;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: v.$color-surface;
+
+  th,
+  td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: v.$color-text !important;
+    border: 0;
+    font-family: inter;
+  }
+
+  tr:hover,
+  td:hover {
+    background-attachment: red !important;
+  }
+
+  th {
+    background: v.$color-surface-strong;
+    font-weight: 600;
+  }
+
+  tr:nth-child(even) {
+    background: v.$color-surface-strong;
+  }
+
+  span:not(.redCell),
+  svg {
+    color: v.$color-text !important;
+  }
+}
+
+.schedule-table {
+  td:first-child,
+  th:first-child {
+    max-width: 100px;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  th,
+  td {
+    padding: 1.25rem 1rem;
+  }
+}
+
+.redCell {
+  color: v.$color-danger !important;
+  font-weight: bold;
+}

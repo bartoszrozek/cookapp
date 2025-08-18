@@ -1,0 +1,59 @@
+@use "../_variables" as v;
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  gap: v.$gutter-md;
+  margin: 0rem v.$gutter-md;
+  justify-content: space-between;
+
+  input {
+    border-radius: v.$radius-sm;
+  }
+}
+
+.schedule-field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  &-center {
+    justify-content: center;
+  }
+
+  &-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}
+
+.fake-button {
+  width: fit-content;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.ingredient-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+
+  > div {
+    display: flex;
+    gap: 2rem;
+  }
+}
+
+.user-name-span {
+  margin-right: 16px;
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}

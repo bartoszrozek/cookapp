@@ -1,0 +1,77 @@
+@use "../_variables" as v;
+
+.tab-modal-container {
+  display: flex;
+  flex-direction: row;
+  gap: v.$gutter-md;
+}
+
+.modal-overlay {
+  background: rgba(0,0,0,0.3);
+  flex-direction: column;
+  justify-content: center;
+  border-radius: v.$radius-lg;
+  position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.modal {
+  color: v.$color-text;
+  padding: 0rem v.$gutter-lg 0rem v.$gutter-lg;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  height: 100%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  margin-bottom: auto;
+}
+
+.modal-form {
+  gap: 1rem;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+
+    > input,
+    > select,
+    > textarea {
+      font-size: v.$font-size-base;
+      border-radius: v.$radius-sm;
+      border: none;
+      background: v.$color-surface;
+      color: v.$color-text;
+      padding: v.$gutter-sm;
+      width: 100%;
+    }
+
+    > select:focus > option,
+    > select:active > option,
+    > select > option {
+      background: v.$color-bg-2;
+      color: v.$color-text;
+      font-size: v.$font-size-base;
+    }
+  }
+
+  > input,
+  > select,
+  > textarea {
+    font-size: v.$font-size-base;
+    border-radius: v.$radius-sm;
+    border: none;
+    background: v.$color-surface;
+    color: v.$color-text;
+    padding: v.$gutter-sm;
+    width: 100%;
+  }
+}
