@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../App.css";
+import "../App.scss";
 import ScheduleTable from "../components/ScheduleTable";
 import type { ModalDataType } from "../types/Schedule.types";
 import type { Recipe } from "../types/apiTypes";

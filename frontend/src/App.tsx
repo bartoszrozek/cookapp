@@ -22,7 +22,7 @@ import Ingredients from './pages/Ingredients';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { useAuth } from './contexts/AuthContext';
-import './App.css';
+import './App.scss';
 
 const TABS = [
  { label: 'Ingredients', path: '/ingredients', icon: <FaCarrot /> },

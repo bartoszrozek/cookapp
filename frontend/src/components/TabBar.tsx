@@ -1,5 +1,5 @@
 import React from "react";
-import "./TabBar.css";
+import "./TabBar.scss";
 
 interface TabBarProps {
   tabs: string[];

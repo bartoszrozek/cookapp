@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../App.css";
+import "../App.scss";
 import { fetchFridgeItems } from "../api";
 import FridgeTable from "../components/FridgeTable";
 

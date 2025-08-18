@@ -1,0 +1,61 @@
+@use "../styles/_variables" as v;
+
+.tab-bar {
+  justify-content: center;
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+
+  .tab {
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: v.$color-text;
+    margin-bottom: 5px;
+
+    &.active {
+      font-weight: bold;
+      background: v.$color-surface-strong;
+    }
+
+    &:not(.active):hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+  }
+
+  &.vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    border-bottom: none;
+    min-width: 180px;
+    height: 100%;
+    margin-bottom: 0;
+
+    .tab {
+      border-bottom: none;
+      border-right: 3px solid transparent;
+      width: 100%;
+      text-align: left;
+      padding: 1rem 1.5rem;
+    }
+  }
+}
+
+.tab-content {
+height: 72vh;
+width: 105%;
+overflow: auto;
+padding: 2rem 0 1rem 0;
+background: v.$color-surface-strong;
+border-radius: v.$radius-lg;
+}
+
+.tab-icon {
+display: inline-flex;
+align-items: center;
+margin-right: 0.7em;
+font-size: 1.25em;
+vertical-align: middle;
+}
+

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../App.css';
+import '../App.scss';
 import ShoppingListTable from '../components/ShoppingListTable';
 import { fetchShoppingList } from '../api';
 import type { Recipe, ShoppingListItem } from '../types/apiTypes';

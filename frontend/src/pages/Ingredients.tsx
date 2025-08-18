@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../App.css";
+import "../App.scss";
 import { fetchIngredients } from "../api";
 import IngredientsTable from "../components/IngredientsTable";
 import AddIngredientModal from "../components/modals/AddIngredientModal";

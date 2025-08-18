@@ -1,0 +1,24 @@
+// Shared design tokens for the app
+$font-inter: 'Inter';
+$font-sans: system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+// Colors
+$color-bg-1: #002d5a;
+$color-bg-2: #000d1a;
+$color-text: #f1f1f1;
+$color-surface: rgba(255, 255, 255, 0.05);
+$color-surface-strong: rgba(255, 255, 255, 0.15);
+$color-accent: #646cff;
+$color-accent-2: #535bf2;
+$color-danger: #ff4040;
+$color-button-text: #002d5a;
+
+// Sizes
+$gutter-sm: 0.5rem;
+$gutter-md: 1rem;
+$gutter-lg: 2rem;
+
+$radius-sm: 8px;
+$radius-lg: 15px;
+
+$font-size-base: 16px;
