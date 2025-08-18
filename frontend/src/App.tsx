@@ -33,12 +33,12 @@ const TABS = [
 ];
 
 function AppLayout() {
+ const { user, logout } = useAuth();
  const location = useLocation();
  const navigate = useNavigate();
  const currentTab =
   TABS.find((tab) => location.pathname.startsWith(tab.path))?.label ||
   TABS[0].label;
- const { user, logout } = useAuth();
 
  return (
   <div className='app-fullscreen-layout'>
@@ -58,7 +58,9 @@ function AppLayout() {
     <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 8 }}>
      {user ? (
       <>
-       <span style={{ marginRight: 8 }}>{user.username || user.email}</span>
+       <span className='user-name-span'>
+        Logged as <strong>{user.username || user.email}</strong>
+       </span>
        <button
         onClick={() => {
          logout();
@@ -69,18 +71,43 @@ function AppLayout() {
        </button>
       </>
      ) : (
-      <button onClick={() => navigate('/login')}>Login</button>
+      <>
+       <button onClick={() => navigate('/login')}>Login</button>
+       <button onClick={() => navigate('/register')} style={{ marginLeft: 8 }}>
+        Register
+       </button>
+      </>
      )}
     </div>
     <Routes>
-     <Route path='/fridge' element={<Fridge />} />
      <Route path='/login' element={<Login />} />
      <Route path='/register' element={<Register />} />
-     <Route path='/recipes' element={<Recipes />} />
-     <Route path='/schedule' element={<Schedule />} />
-     <Route path='/shopping-list' element={<ShoppingList />} />
-     <Route path='/ingredients' element={<Ingredients />} />
-     <Route path='*' element={<Navigate to='/ingredients' replace />} />
+
+     <Route
+      path='/ingredients'
+      element={user ? <Ingredients /> : <Navigate to='/login' replace />}
+     />
+     <Route
+      path='/recipes'
+      element={user ? <Recipes /> : <Navigate to='/login' replace />}
+     />
+     <Route
+      path='/schedule'
+      element={user ? <Schedule /> : <Navigate to='/login' replace />}
+     />
+     <Route
+      path='/fridge'
+      element={user ? <Fridge /> : <Navigate to='/login' replace />}
+     />
+     <Route
+      path='/shopping-list'
+      element={user ? <ShoppingList /> : <Navigate to='/login' replace />}
+     />
+
+     <Route
+      path='*'
+      element={<Navigate to={user ? '/ingredients' : '/login'} replace />}
+     />
     </Routes>
    </main>
   </div>

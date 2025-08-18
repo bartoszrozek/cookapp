@@ -249,3 +249,11 @@ button {
   display: flex;
   gap: 2rem
 }
+
+.user-name-span {
+  margin-right: 16px;
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
