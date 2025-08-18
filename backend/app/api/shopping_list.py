@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session
 
 from .. import models, schemas
 from ..database import SessionLocal
+from ..users import current_active_user
+from ..schemas import User as UserSchema
 
 router = APIRouter()
 
@@ -27,6 +29,7 @@ def list_shopping_list(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
+    current_user: UserSchema = Depends(current_active_user),
 ) -> list[schemas.ShoppingListItem]:
     """
     Retrieve a list of shopping list items, optionally filtered by date range, paginated by skip and limit.
@@ -80,5 +83,7 @@ def list_shopping_list(
         stmt = stmt.where(models.Schedule.date >= start_date)
     if end_date:
         stmt = stmt.where(models.Schedule.date <= end_date)
+    # scope to current user
+    stmt = stmt.where(models.Schedule.user_id == current_user.id)
 
     return db.execute(stmt).all()  # type: ignore

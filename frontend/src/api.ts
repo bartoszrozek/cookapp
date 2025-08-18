@@ -1,6 +1,31 @@
 import type { Ingredient, Recipe, FridgeItem, MealType, Schedule, ShoppingListItem } from "./types/apiTypes";
 // API utility for CookApp
-const API_BASE = "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
+
+let accessToken: string | null = null;
+
+export function setAccessToken(token: string | null) {
+  accessToken = token;
+}
+
+async function fetchWithAuth(input: RequestInfo | URL, init?: RequestInit) {
+  const headers = new Headers(init?.headers as Record<string,string> || {});
+  if (accessToken) {
+    headers.set('Authorization', `Bearer ${accessToken}`);
+  }
+  const res = await fetch(input, { ...init, headers, credentials: 'include' });
+  if (res.status === 401) {
+    // try refresh
+    const r = await fetch(`${API_BASE}/auth/refresh`, { method: 'POST', credentials: 'include' });
+    if (r.ok) {
+      const data = await r.json();
+      setAccessToken(data.access_token);
+      headers.set('Authorization', `Bearer ${data.access_token}`);
+      return fetch(input, { ...init, headers, credentials: 'include' });
+    }
+  }
+  return res;
+}
 
 export async function fetchIngredients(): Promise<Ingredient[]> {
   const res = await fetch(`${API_BASE}/ingredients/`);
@@ -21,7 +46,7 @@ export async function fetchRecipeById(id: number): Promise<Recipe> {
 }
 
 export async function fetchFridgeItems(): Promise<FridgeItem[]> {
-  const res = await fetch(`${API_BASE}/fridge_items/`);
+  const res = await fetchWithAuth(`${API_BASE}/fridge_items/`);
   if (!res.ok) throw new Error("Failed to fetch fridge items");
   return res.json();
 }
@@ -37,7 +62,7 @@ export async function addIngredient(ingredient: Partial<Ingredient>): Promise<In
 }
 
 export async function addFridgeItem(item: Partial<FridgeItem>): Promise<FridgeItem> {
-  const res = await fetch(`${API_BASE}/fridge_items/`, {
+  const res = await fetchWithAuth(`${API_BASE}/fridge_items/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(item)
@@ -47,14 +72,14 @@ export async function addFridgeItem(item: Partial<FridgeItem>): Promise<FridgeIt
 }
 
 export async function deleteFridgeItem(id: number): Promise<void> {
-  const res = await fetch(`${API_BASE}/fridge_items/${id}/`, {
+  const res = await fetchWithAuth(`${API_BASE}/fridge_items/${id}/`, {
     method: "DELETE"
   });
   if (!res.ok) throw new Error("Failed to delete fridge item");
 }
 
 export async function updateFridgeItem(id: number, item: Partial<FridgeItem>): Promise<FridgeItem> {
-  const res = await fetch(`${API_BASE}/fridge_items/${id}/`, {
+  const res = await fetchWithAuth(`${API_BASE}/fridge_items/${id}/`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(item)
@@ -125,6 +150,36 @@ export async function addScheduleDish(scheduleItem: Partial<Schedule>): Promise<
   });
   if (!res.ok) throw new Error("Failed to add dish to schedule");
   return res.json();
+}
+
+export async function login(email: string, password: string) {
+  const res = await fetch(`${API_BASE}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: email, password }),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error('Login failed');
+  const data = await res.json();
+  setAccessToken(data.access_token);
+  return data;
+}
+
+export async function register(username: string, email: string, password: string) {
+  const res = await fetch(`${API_BASE}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, email, password }),
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error('Registration failed');
+  return res.json();
+}
+
+export async function logout() {
+  setAccessToken(null);
+  // If backend provides logout endpoint to clear cookies, call it
+  await fetch(`${API_BASE}/auth/logout`, { method: 'POST', credentials: 'include' }).catch(() => {});
 }
 
 export async function deleteScheduleDish(id: number): Promise<void> {

@@ -48,6 +48,28 @@ DATABASE_URL=postgresql+psycopg2://<user>:<password>@localhost:5432/cookapp_db
 alembic upgrade head
 ```
 
+### Auth setup
+
+The project now uses fastapi-users for authentication. Add these environment variables to your `.env` before running the app or migrations:
+
+```
+JWT_SECRET=replace_this_with_a_strong_secret
+ACCESS_TOKEN_EXPIRE_MINUTES=15
+FRONTEND_ORIGIN=http://localhost:5173
+
+# Auth endpoints
+The backend exposes these auth endpoints (under `/auth`):
+
+- `POST /auth/register` - register a new user (fastapi-users)
+- `POST /auth/login` - login with email (username) and password; returns short-lived access token and sets an httpOnly `refresh_token` cookie
+- `POST /auth/refresh` - exchanges refresh cookie for a new access token (and rotates refresh cookie)
+- `POST /auth/logout` - clears refresh cookie
+
+Frontend must call the refresh endpoint with `credentials: 'include'` so the browser sends the httpOnly cookie. In `frontend/src/api.ts` our helper uses `credentials: 'include'`.
+```
+
+If your `users` table needs new columns (`hashed_password`, `is_active`, `is_superuser`, `is_verified`) create a migration with alembic or run the provided migration template in `alembic/versions/zz_fastapi_users_add_fields.py`.
+
 ### 6. Start the server
 ```
 uvicorn app.main:app --reload

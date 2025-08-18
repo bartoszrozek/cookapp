@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..database import SessionLocal
+from ..users import current_active_user
+from ..schemas import User as UserSchema
 
 router = APIRouter()
 
@@ -15,7 +17,11 @@ def get_db():
 
 
 @router.post("/fridge_items/", response_model=schemas.FridgeItem)
-def create_fridge_item(item: schemas.FridgeItemCreate, db: Session = Depends(get_db)):
+def create_fridge_item(
+    item: schemas.FridgeItemCreate,
+    db: Session = Depends(get_db),
+    current_user: UserSchema = Depends(current_active_user),
+):
     """
     Create a new fridge item with the provided data.
 
@@ -26,7 +32,9 @@ def create_fridge_item(item: schemas.FridgeItemCreate, db: Session = Depends(get
     Returns:
         models.FridgeItem: The created fridge item.
     """
-    db_item = models.FridgeItem(**item.model_dump())
+    data = item.model_dump()
+    data["user_id"] = current_user.id
+    db_item = models.FridgeItem(**data)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -34,7 +42,12 @@ def create_fridge_item(item: schemas.FridgeItemCreate, db: Session = Depends(get
 
 
 @router.get("/fridge_items/", response_model=list[schemas.FridgeNamedItem])
-def list_fridge_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def list_fridge_items(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: UserSchema = Depends(current_active_user),
+):
     """
     Retrieve a list of fridge items, paginated by skip and limit.
 
@@ -51,9 +64,8 @@ def list_fridge_items(skip: int = 0, limit: int = 100, db: Session = Depends(get
             models.FridgeItem,
             models.Ingredient.name.label("name"),
         )
-        .join(
-            models.Ingredient, models.FridgeItem.ingredient_id == models.Ingredient.id
-        )
+        .join(models.Ingredient, models.FridgeItem.ingredient_id == models.Ingredient.id)
+        .filter(models.FridgeItem.user_id == current_user.id)
         .offset(skip)
         .limit(limit)
         .all()
@@ -96,7 +108,9 @@ def get_fridge_item(item_id: int, db: Session = Depends(get_db)):
 
 @router.delete("/fridge_items/{fridge_item_id}", response_model=schemas.FridgeItem)
 def delete_fridge_item(
-    fridge_item_id: int, db: Session = Depends(get_db)
+    fridge_item_id: int,
+    db: Session = Depends(get_db),
+    current_user: UserSchema = Depends(current_active_user),
 ) -> models.FridgeItem:
     """
     Delete a fridge item by its ID.
@@ -118,6 +132,10 @@ def delete_fridge_item(
     )
     if not fridge_item:
         raise HTTPException(status_code=404, detail="Fridge item not found")
+    # Ensure ownership
+    owner_id = getattr(fridge_item, 'user_id')
+    if owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this item")
     db.delete(fridge_item)
     db.commit()
     return fridge_item
@@ -128,6 +146,7 @@ def update_fridge_item(
     fridge_item_id: int,
     fridge_item: schemas.FridgeItemCreate,
     db: Session = Depends(get_db),
+    current_user: UserSchema = Depends(current_active_user),
 ) -> models.FridgeItem:
     """
     Update an existing fridge item by its ID.
@@ -150,7 +169,9 @@ def update_fridge_item(
     )
     if not db_fridge_item:
         raise HTTPException(status_code=404, detail="Fridge item not found")
-
+    owner_id = getattr(db_fridge_item, 'user_id')
+    if owner_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to update this item")
     # Update the fridge item fields
     for key, value in fridge_item.model_dump().items():
         setattr(db_fridge_item, key, value)

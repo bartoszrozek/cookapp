@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import os
+
+from . import users
 
 from . import models
 from .api import fridge_items, ingredients, meal_types, recipes, schedule, shopping_list
@@ -16,10 +19,23 @@ app.include_router(meal_types.router)
 app.include_router(schedule.router)
 app.include_router(shopping_list.router)
 
+# FastAPI Users routers (auth, register, users management)
+app.include_router(users.router, prefix="/auth", tags=["auth"])
+app.include_router(
+    users.fastapi_users.get_register_router(users.UserCreate, users.UserDB),
+    prefix="/auth",
+    tags=["auth"],
+)
+app.include_router(
+    users.fastapi_users.get_users_router(users.UserDB, users.UserRead),
+    prefix="/users",
+    tags=["users"],
+)
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or specify your frontend URL
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

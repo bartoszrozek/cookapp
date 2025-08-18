@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..database import SessionLocal
+from ..users import current_active_user
+from ..schemas import User as UserSchema
 from typing import Optional
 from datetime import date
 
@@ -15,7 +17,11 @@ def get_db():
         db.close()
 
 @router.post("/schedule/", response_model=schemas.Schedule)
-def create_schedule(schedule: schemas.ScheduleCreate, db: Session = Depends(get_db)) -> models.Schedule:
+def create_schedule(
+    schedule: schemas.ScheduleCreate,
+    db: Session = Depends(get_db),
+    current_user: UserSchema = Depends(current_active_user),
+) -> models.Schedule:
     """
     Create a new schedule entry with the provided data.
 
@@ -26,7 +32,9 @@ def create_schedule(schedule: schemas.ScheduleCreate, db: Session = Depends(get_
     Returns:
         models.Schedule: The created schedule entry.
     """
-    db_schedule = models.Schedule(**schedule.model_dump())
+    data = schedule.model_dump()
+    data["user_id"] = current_user.id
+    db_schedule = models.Schedule(**data)
     db.add(db_schedule)
     db.commit()
     db.refresh(db_schedule)
@@ -38,7 +46,8 @@ def list_schedule(
     limit: int = 100,
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: UserSchema = Depends(current_active_user),
 ) -> list[schemas.ScheduleGet]:
     """
     Retrieve a list of schedule entries, optionally filtered by date range, paginated by skip and limit.
@@ -56,6 +65,7 @@ def list_schedule(
     query = db.query(models.Schedule, models.Recipe.name.label("recipe_name")).join(
         models.Recipe, models.Schedule.recipe_id == models.Recipe.id
     )
+    query = query.filter(models.Schedule.user_id == current_user.id)
     if start_date:
         query = query.filter(models.Schedule.date >= start_date)
     if end_date:
