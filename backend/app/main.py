@@ -21,16 +21,6 @@ app.include_router(shopping_list.router)
 
 # FastAPI Users routers (auth, register, users management)
 app.include_router(users.router, prefix="/auth", tags=["auth"])
-app.include_router(
-    users.fastapi_users.get_register_router(users.UserCreate, users.UserDB),
-    prefix="/auth",
-    tags=["auth"],
-)
-app.include_router(
-    users.fastapi_users.get_users_router(users.UserDB, users.UserRead),
-    prefix="/users",
-    tags=["users"],
-)
 
 
 app.add_middleware(

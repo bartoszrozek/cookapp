@@ -1,4 +1,5 @@
-import type { Ingredient, Recipe, FridgeItem, MealType, Schedule, ShoppingListItem } from "./types/apiTypes";
+import type { Ingredient, Recipe, FridgeItem, MealType, ShoppingListItem } from "./types/apiTypes";
+import type { Schedule } from "./types/Schedule.types";
 // API utility for CookApp
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
 
@@ -110,7 +111,7 @@ export async function fetchSchedule(startDate?: string, endDate?: string): Promi
     ? `${API_BASE}/schedule/?${params.toString()}`
     : `${API_BASE}/schedule/`;
 
-  const res = await fetch(url);
+  const res = await fetchWithAuth(url);
   if (!res.ok) throw new Error("Failed to fetch schedule");
   return res.json();
 }
@@ -143,7 +144,7 @@ export async function deleteRecipe(id: number): Promise<void> {
 }
 
 export async function addScheduleDish(scheduleItem: Partial<Schedule>): Promise<Schedule> {
-  const res = await fetch(`${API_BASE}/schedule/`, {
+  const res = await fetchWithAuth(`${API_BASE}/schedule/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(scheduleItem)
@@ -161,6 +162,7 @@ export async function login(email: string, password: string) {
   });
   if (!res.ok) throw new Error('Login failed');
   const data = await res.json();
+  console.log("Login response:", data);
   setAccessToken(data.access_token);
   return data;
 }
@@ -183,7 +185,7 @@ export async function logout() {
 }
 
 export async function deleteScheduleDish(id: number): Promise<void> {
-  const res = await fetch(`${API_BASE}/schedule/${id}/`, {
+  const res = await fetchWithAuth(`${API_BASE}/schedule/${id}/`, {
     method: "DELETE"
   });
   if (!res.ok) throw new Error("Failed to delete dish from schedule");
