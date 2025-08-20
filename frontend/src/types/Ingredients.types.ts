@@ -3,14 +3,14 @@ export interface Ingredient {
   name: string;
   category: string;
   default_unit: string;
-  calories_per_unit: string;
+  calories_per_unit: number;
 }
 
 export interface NewIngredient {
   name: string;
   category: string;
   default_unit: string;
-  calories_per_unit: string;
+  calories_per_unit: number;
 }
 
 export interface FridgeForm {
@@ -29,7 +29,7 @@ export interface AddIngredientModalProps {
     name: string;
     category: string;
     default_unit: string;
-    calories_per_unit: string;
+    calories_per_unit: number;
   };
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

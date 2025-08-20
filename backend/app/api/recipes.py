@@ -26,7 +26,6 @@ def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)) -
     Returns:
         models.Recipe: The created recipe including all fields and relationships.
     """
-    breakpoint()
     recipe_dict = recipe.model_dump()
     # TODO: Handle adding ingredients to ingredient-recipe table
     ingredients = recipe_dict.pop("ingredients", None)

@@ -5,7 +5,8 @@ import IngredientsTable from "../components/IngredientsTable";
 import AddIngredientModal from "../components/modals/AddIngredientModal";
 import AddToFridgeModal from "../components/modals/AddToFridgeModal";
 import Filter from "../components/Filter";
-import type { Ingredient, NewIngredient, FridgeForm } from "../types/Ingredients.types";
+import type { NewIngredient } from "../types/Ingredients.types";
+import type { Ingredient } from "../types/apiTypes";
 
 const Ingredients: React.FC = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -15,7 +16,7 @@ const Ingredients: React.FC = () => {
     name: "",
     category: "",
     default_unit: "",
-    calories_per_unit: ""
+    calories_per_unit: 0
   });
   const [adding, setAdding] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
@@ -23,13 +24,6 @@ const Ingredients: React.FC = () => {
   const ingredientModalOpen = modalOpen == "ingredient"
   const fridgeModalOpen = modalOpen == "fridge";
   const [selectedIngredient, setSelectedIngredient] = useState<any | null>(null);
-  const [fridgeForm, setFridgeForm] = useState<FridgeForm>({
-    quantity: '',
-    unit: '',
-    expiration_date: ''
-  });
-  const [fridgeAdding, setFridgeAdding] = useState(false);
-  const [fridgeError, setFridgeError] = useState<string | null>(null);
 
   const [filteredIngredients, setFilteredIngredients] = useState<Ingredient[]>([]);
 
@@ -54,7 +48,7 @@ const Ingredients: React.FC = () => {
     try {
       const added = await import("../api").then(m => m.addIngredient(newIngredient));
       setIngredients((prev) => [...prev, added]);
-      setNewIngredient({ name: "", category: "", default_unit: "", calories_per_unit: "" });
+      setNewIngredient({ name: "", category: "", default_unit: "", calories_per_unit: 0 });
       setModalOpen("none");
     } catch (err: any) {
       setAddError(err.message || "Failed to add ingredient");
@@ -65,20 +59,7 @@ const Ingredients: React.FC = () => {
 
   const openFridgeModal = (ingredient: any) => {
     setSelectedIngredient(ingredient);
-    setFridgeForm({
-      quantity: '',
-      unit: ingredient.default_unit || '',
-      expiration_date: ''
-    });
     setModalOpen("fridge");
-    setFridgeError(null);
-  };
-
-  const handleFridgeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFridgeForm({
-      ...fridgeForm,
-      [e.target.name]: e.target.value
-    });
   };
 
   const handleDeleteIngredient = async (id: number) => {

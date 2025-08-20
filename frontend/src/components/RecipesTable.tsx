@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import { FaEye, FaCartPlus, FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
 import DivButton from "../components/DivButton";
 import type { RecipesTableProps } from "../types/Recipes.types";
 import type { Recipe } from "../types/apiTypes";
@@ -20,7 +20,7 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick, on
   const [sortBy, setSortBy] = React.useState<'name' | 'description' | 'servings' | 'prep_time_min' | 'cook_time_min'>('name');
   const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -117,7 +117,6 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick, on
               <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
-              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -143,17 +142,12 @@ const RecipesTable: React.FC<RecipesTableProps> = ({ recipes, onButtonsClick, on
                     <FaTrashAlt  size={20}/>
                   </DivButton>
                 </TableCell>
-                <TableCell>
-                  <DivButton tooltip="Add to schedule" onClick={() => onButtonsClick(rec, "addToSchedule")}> 
-                    <FaCartPlus  size={20}/>
-                  </DivButton>
-                </TableCell>
               </TableRow>
             ))}
             {emptyRows > 0 &&
               Array.from({ length: emptyRows }).map((_, idx) => (
                 <TableRow key={`empty-${idx}`} style={{ height: 49.3 }}>
-                  <TableCell colSpan={10} />
+                  <TableCell colSpan={9} />
                 </TableRow>
               ))}
           </TableBody>

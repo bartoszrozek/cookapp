@@ -24,7 +24,7 @@ const IngredientsTable: React.FC<IngredientsTableProps> = ({ ingredients, onAddT
   const [sortBy, setSortBy] = React.useState<'name' | 'category' | 'default_unit' | 'calories_per_unit'>("name");
   const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>("asc");
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
   };
 

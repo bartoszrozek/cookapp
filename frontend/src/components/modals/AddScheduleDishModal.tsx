@@ -6,7 +6,7 @@ interface AddScheduleDishModalProps {
     onClose: () => void;
     date?: string;
     mealTypeId?: number;
-    onSubmit: (recipeId: number, date: string, mealTypeId: number) => void;
+    onSubmit: (recipeId: number) => void;
     recipes: { id: number; name: string }[];
 }
 
@@ -16,7 +16,7 @@ const AddScheduleDishModal: React.FC<AddScheduleDishModalProps> = ({ open, onClo
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (selectedRecipe) {
-            onSubmit(Number(selectedRecipe));
+            onSubmit(selectedRecipe);
             setSelectedRecipe("");
         }
     };
@@ -26,7 +26,7 @@ const AddScheduleDishModal: React.FC<AddScheduleDishModalProps> = ({ open, onClo
             <form className="modal-form" onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 <div>
                     <label>Select Recipe</label>
-                    <select value={selectedRecipe} onChange={e => setSelectedRecipe(e.target.value)} required>
+                    <select value={selectedRecipe} onChange={e => setSelectedRecipe(Number(e.target.value))} required>
                         <option value="">Select a recipe</option>
                         {recipes.map(recipe => (
                             <option key={recipe.id} value={recipe.id}>{recipe.name}</option>

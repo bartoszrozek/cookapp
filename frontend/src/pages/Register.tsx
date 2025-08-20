@@ -24,7 +24,7 @@ export default function Register() {
   return (
     <div style={{ padding: 20 }}>
       <h2>Register</h2>
-      <form onSubmit={submit}>
+      <form className='modal-form' onSubmit={submit}>
         <div>
           <label>Username</label>
           <input value={username} onChange={e => setUsername(e.target.value)} />

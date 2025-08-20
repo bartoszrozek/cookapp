@@ -34,7 +34,7 @@ const AddToFridgeModal: React.FC<AddToFridgeModalProps> = ({
       await addFridgeItem({
         ingredient_id,
         user_id: 1, // Replace with actual user ID if needed
-        quantity: parseFloat(quantity),
+        quantity: Number(quantity),
         unit,
         expiration_date: expirationDate
       });

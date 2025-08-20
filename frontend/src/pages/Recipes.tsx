@@ -3,7 +3,6 @@ import "../App.scss";
 import { fetchRecipes } from "../api";
 import RecipesTable from "../components/RecipesTable";
 import Filter from "../components/Filter";
-import AddToScheduleModal from "../components/modals/AddToScheduleModal";
 import AddRecipeModal from "../components/modals/AddRecipeModal";
 import RecipeInstructionsModal from "../components/modals/RecipeInstructionsModal";
 
@@ -15,12 +14,6 @@ const Recipes: React.FC = () => {
   const [modalOpen, setModalOpen] = useState("none");
   const [selectedRecipe, setSelectedRecipe] = useState<any | null>(null);
   const modalInstructionsOpen: boolean = modalOpen === "instructions";
-  const modalAddToScheduleOpen: boolean = modalOpen === "addToSchedule";
-  const [scheduleAdding, setScheduleAdding] = useState(false);
-  const [scheduleError, setScheduleError] = useState<string | null>(null);
-  const [scheduleForm, setScheduleForm] = useState({
-    date: ''
-  });
 
   useEffect(() => {
     fetchRecipes()
@@ -79,16 +72,6 @@ const Recipes: React.FC = () => {
           open={modalInstructionsOpen && !!selectedRecipe}
           onClose={() => setModalOpen("none")}
           recipe={selectedRecipe}
-        />
-        <AddToScheduleModal
-          open={modalAddToScheduleOpen && !!selectedRecipe}
-          onClose={() => setModalOpen("none")}
-          // onSubmit={handleAddToSchedule}
-          scheduleAdding={scheduleAdding}
-          scheduleError={scheduleError}
-          scheduleForm={scheduleForm}
-          // onInputChange={handleFridgeInputChange}
-          recipeName={selectedRecipe?.name}
         />
         <AddRecipeModal
           type={selectedRecipe ? "edit" : "add"}

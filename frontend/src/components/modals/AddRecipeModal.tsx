@@ -41,7 +41,7 @@ function reducer(state: AddRecipeState, action: Action): AddRecipeState {
 
 const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ type, open, onClose, onSubmit, recipe}) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [ingredients, setIngredients] = React.useState<Ingredient[]>();
+    const [ingredients, setIngredients] = React.useState<Ingredient[]>([]);
 
     // Populate state with recipe data only when recipe changes
     useEffect(() => {
@@ -52,8 +52,8 @@ const AddRecipeModal: React.FC<AddRecipeModalProps> = ({ type, open, onClose, on
         if (recipe) {
             dispatch({ type: "reset", value: null });
             Object.keys(recipe).forEach(key => {
-                if (key in initialState) {
-                    dispatch({ type: key as keyof AddRecipeState, value: recipe[key as keyof AddRecipeState] });
+                if (key in initialState && key !== "ingredients") {
+                    dispatch({ type: key as keyof AddRecipeState, value: (recipe as any)[key] });
                 }
                 if (key === "recipe_ingredients") {
                     const recipeIngredients = recipe.recipe_ingredients.map(ing => ({

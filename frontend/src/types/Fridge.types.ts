@@ -1,5 +1,4 @@
-import type { FridgeItem } from "../types/apiTypes";
-import type { Ingredient } from "./Ingredients.types";
+import type { Ingredient, FridgeItem } from "../types/apiTypes";
 
 export interface AddToFridgeModalProps {
   open: boolean;

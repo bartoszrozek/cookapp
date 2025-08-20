@@ -19,7 +19,7 @@ const ShoppingListTable: React.FC<ShoppingListTableProps> = ({ items, onAddToFri
   const [sortBy, setSortBy] = React.useState<'ingredient_name' | 'quantity' | 'unit'>('ingredient_name');
   const [sortOrder, setSortOrder] = React.useState<'asc' | 'desc'>('asc');
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
   };
 
