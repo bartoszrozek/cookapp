@@ -214,12 +214,14 @@ class ScheduleBase(BaseModel):
     date: datatime_date = Field(..., description="Date of the scheduled meal.")
     meal_type: int = Field(..., description="ID of the meal type.")
 
-class ScheduleCreate(ScheduleBase):
+class ScheduleCreate(BaseModel):
     """
     Schema for creating a Schedule entry.
     Inherits all fields from ScheduleBase.
     """
-    pass
+    recipe_id: int = Field(..., description="ID of the recipe.")
+    date: datatime_date = Field(..., description="Date of the scheduled meal.")
+    meal_type: int = Field(..., description="ID of the meal type.")
 
 class Schedule(ScheduleBase):
     """

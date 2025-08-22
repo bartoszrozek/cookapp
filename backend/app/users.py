@@ -1,7 +1,8 @@
 import os
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
+from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr
@@ -60,19 +61,25 @@ security = HTTPBearer()
 # Utilities for tokens and password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def create_access_token(user_id: int) -> str:
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode = {"sub": str(user_id), "exp": expire, "type": "access"}
     return jwt.encode(to_encode, SECRET, algorithm=ALGORITHM)
 
 
 def create_refresh_token(user_id: int) -> str:
-    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    expire = datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
     to_encode = {
         "sub": str(user_id),
         "exp": expire,
@@ -122,8 +129,7 @@ router = APIRouter()
 
 
 @router.post("/login")
-def login(payload: LoginRequest, response: Response) -> TokenPack:
-    db = SessionLocal()
+def login(payload: LoginRequest, response: Response, db: Session = Depends(get_db)) -> TokenPack:
     try:
         user = (
             db.query(models.User).filter(models.User.email == payload.username).first()

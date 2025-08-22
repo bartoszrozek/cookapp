@@ -30,7 +30,7 @@ def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)) -
     # TODO: Handle adding ingredients to ingredient-recipe table
     ingredients = recipe_dict.pop("ingredients", None)
     ingredients = [
-        schemas.IngredientInRecipe(**ing.model_dump()) for ing in ingredients
+        schemas.IngredientInRecipe(**ing) for ing in ingredients
     ]
     db_recipe = models.Recipe(**recipe_dict)
     db.add(db_recipe)
