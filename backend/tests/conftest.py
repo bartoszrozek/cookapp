@@ -15,31 +15,7 @@ from app.users import pwd_context  # ty: ignore
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
-
-dirname = os.path.dirname(__file__)
-# Setup test database engine and session factory using SQLite in-memory DB for tests
-engine = create_engine(f"sqlite:///{dirname}/test.db", connect_args={"check_same_thread": False})
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# override app SessionLocal to use the testing session
-app.dependency_overrides[SessionLocal] = TestingSessionLocal
-
-
-def db_session_func():
-    # use the testing session factory
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-app.dependency_overrides[get_db] = db_session_func
-app.dependency_overrides[get_recipe_db] = db_session_func
-app.dependency_overrides[get_schedule_db] = db_session_func
-app.dependency_overrides[get_user_db] = db_session_func
-app.dependency_overrides[get_meal_type_db] = db_session_func
-app.dependency_overrides[get_fridge_db] = db_session_func
-app.dependency_overrides[get_shopping_list_db] = db_session_func
+from app.database import SessionLocal, engine
 
 
 @pytest.fixture(scope="session")
@@ -49,7 +25,7 @@ def client():
         yield c
 
 def clear_tables():
-    db = TestingSessionLocal()
+    db = SessionLocal()
     model_classes = [
         v
         for v in models.__dict__.values()
@@ -91,7 +67,7 @@ def _create_user_in_db(db: Session, email: str = "testuser@example.com", passwor
 @pytest.fixture(scope="module")
 def db_session():
     # use the testing session factory
-    db = TestingSessionLocal()
+    db = SessionLocal()
     try:
         yield db
     finally:
