@@ -38,5 +38,7 @@ jobs:
 
       - name: Check types with ty
         working-directory: backend
-        run: uvx ty check
-
+          run: |
+            set -o pipefail
+            uvx ty check | tee ty_output.log
+            grep -i found ty_output.log && exit 1 || exit 0
