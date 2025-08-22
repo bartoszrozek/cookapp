@@ -145,22 +145,22 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
-class FridgeItemBase(BaseModel):
+class FridgeItemCreate(BaseModel):
     """
-    Base schema for FridgeItem.
+    Schema for creating a FridgeItem.
+    Inherits all fields from FridgeItemBase.
     """
-    user_id: int = Field(..., description="ID of the user.")
     ingredient_id: int = Field(..., description="ID of the ingredient.")
     quantity: float = Field(..., description="Quantity of the ingredient.")
     unit: str = Field(..., description="Unit of measurement.")
     expiration_date: Optional[datatime_date] = Field(None, description="Expiration date of the item.")
 
-class FridgeItemCreate(FridgeItemBase):
+
+class FridgeItemBase(FridgeItemCreate):
     """
-    Schema for creating a FridgeItem.
-    Inherits all fields from FridgeItemBase.
+    Base schema for FridgeItem.
     """
-    pass
+    user_id: int = Field(..., description="ID of the user.")
 
 class FridgeItem(FridgeItemBase):
     """
