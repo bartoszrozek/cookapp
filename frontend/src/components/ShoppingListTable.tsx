@@ -115,7 +115,7 @@ const ShoppingListTable: React.FC<ShoppingListTableProps> = ({ items, onAddToFri
             {emptyRows > 0 &&
               Array.from({ length: emptyRows }).map((_, idx) => (
                 <TableRow key={`empty-${idx}`} style={{ height: 49.3 }}>
-                  <TableCell colSpan={3} />
+                  <TableCell colSpan={5} />
                 </TableRow>
               ))}
           </TableBody>

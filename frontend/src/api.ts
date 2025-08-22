@@ -200,7 +200,7 @@ export async function fetchShoppingList(startDate?: string, endDate?: string): P
     ? `${API_BASE}/shopping_list/?${params.toString()}`
     : `${API_BASE}/shopping_list/`;
 
-  const res = await fetch(url);
+  const res = await fetchWithAuth(url);
   if (!res.ok) throw new Error("Failed to fetch shopping list");
   return res.json();
 }
