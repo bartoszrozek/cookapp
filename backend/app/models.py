@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text, ForeignKey, Date, CheckConstraint
 from sqlalchemy.orm import relationship
-from .database import Base
+from .database import Base, engine
 from .helpers import time_now
 
 
@@ -235,3 +235,4 @@ class MealType(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
 
+Base.metadata.create_all(bind=engine)

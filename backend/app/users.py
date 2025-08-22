@@ -1,17 +1,18 @@
 import os
 import secrets
 from datetime import datetime, timedelta
-
-from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from pydantic import BaseModel, EmailStr
 from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from pydantic import BaseModel, EmailStr
+from sqlalchemy.orm import Session
 
 from . import models
 from .database import SessionLocal
+
 
 # Use integer IDs for this project
 class UserRead(BaseModel):
@@ -42,12 +43,14 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
+
 class UserSent(BaseModel):
     id: int
     email: EmailStr
     username: Optional[str] = None
     is_active: bool = True
     is_superuser: bool = False
+
 
 class TokenPack(BaseModel):
     access_token: str
@@ -61,12 +64,14 @@ security = HTTPBearer()
 # Utilities for tokens and password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
@@ -98,6 +103,7 @@ REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db),
 ):
     """Decode JWT from Authorization header and return the DB user."""
     token = credentials.credentials
@@ -109,7 +115,6 @@ def get_current_user(
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    db = SessionLocal()
     try:
         user = db.query(models.User).filter(models.User.id == user_id).first()
         if not user:
@@ -129,7 +134,9 @@ router = APIRouter()
 
 
 @router.post("/login")
-def login(payload: LoginRequest, response: Response, db: Session = Depends(get_db)) -> TokenPack:
+def login(
+    payload: LoginRequest, response: Response, db: Session = Depends(get_db)
+) -> TokenPack:
     try:
         user = (
             db.query(models.User).filter(models.User.email == payload.username).first()
@@ -161,7 +168,7 @@ def login(payload: LoginRequest, response: Response, db: Session = Depends(get_d
                 username=user.username,
                 is_active=user.is_active,
                 is_superuser=user.is_superuser,
-            )
+            ),
         )
     finally:
         db.close()
