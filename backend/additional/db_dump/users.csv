@@ -1,0 +1,2 @@
+id,username,email,hashed_password,is_active,is_superuser,is_verified,created_at
+1,bart,user@example.com,$2b$12$zP9.MtRT/GdoBR5.i1Lht.z38v9BqJVsMxI0l.1rd.z/MlGUiwLye,True,False,False,2025-08-18 19:27:50.569161
