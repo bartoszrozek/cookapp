@@ -21,14 +21,19 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+      
+      - name: 'Create env file'
+        working-directory: backend
+        run: |
+          touch .env
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+          cat .env
 
       - name: "Set up Python"
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Print all environment variables
-        run: |
-          printenv | sort     
+      
       - name: Install uv
         uses: astral-sh/setup-uv@v6
 
