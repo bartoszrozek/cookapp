@@ -69,5 +69,5 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
-const port = process.env.PORT || 5173;
+const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Frontend server listening on ${port}`));
