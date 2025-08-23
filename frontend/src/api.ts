@@ -2,7 +2,7 @@ import type { Ingredient, Recipe, FridgeItem, MealType, ShoppingListItem } from 
 import type { Schedule } from "./types/Schedule.types";
 // API utility for CookApp
 import { API_BASE } from './config';
-console.log("API_BASE:", API_BASE);
+console.log("API Link:", API_BASE);
 
 let accessToken: string | null = null;
 
