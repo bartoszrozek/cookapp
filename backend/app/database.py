@@ -1,7 +1,9 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
 import os
+
+import sqlalchemy
 from dotenv import load_dotenv
+from sqlalchemy import create_engine, engine
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
@@ -10,7 +12,24 @@ if "GITHUB_WORKFLOW" not in os.environ:
     if not DATABASE_URL:
         raise ValueError("DATABASE_URL environment variable is not set")
 
-    engine = create_engine(DATABASE_URL)
+    db_host = os.environ["INSTANCE_HOST"]
+    db_user = os.environ["DB_USER"]
+    db_pass = os.environ["DB_PASSWORD"]
+    db_name = os.environ["DB_NAME"]
+    db_port = int(os.environ["DB_PORT"])
+
+    engine = create_engine(
+        sqlalchemy.engine.url.URL.create(
+            drivername="postgresql+psycopg2",
+            username=db_user,
+            password=db_pass,
+            host=db_host,
+            port=db_port,
+            database=db_name,
+        ),
+    )
+    
+
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     Base = declarative_base()
 
