@@ -1,8 +1,8 @@
 import type { Ingredient, Recipe, FridgeItem, MealType, ShoppingListItem } from "./types/apiTypes";
 import type { Schedule } from "./types/Schedule.types";
 // API utility for CookApp
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
-
+const API_BASE = import.meta.env.VITE_API_BASE;
+console.log("API_BASE:", API_BASE);
 let accessToken: string | null = null;
 
 export function setAccessToken(token: string | null) {
