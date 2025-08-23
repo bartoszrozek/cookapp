@@ -8,9 +8,6 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 load_dotenv()
 
 if "GITHUB_WORKFLOW" not in os.environ:
-    DATABASE_URL = os.getenv("DATABASE_URL")
-    if not DATABASE_URL:
-        raise ValueError("DATABASE_URL environment variable is not set")
 
     db_host = os.environ["INSTANCE_HOST"]
     db_user = os.environ["DB_USER"]
