@@ -20,7 +20,6 @@ import Schedule from './pages/Schedule';
 import ShoppingList from './pages/ShoppingList';
 import Ingredients from './pages/Ingredients';
 import Login from './pages/Login';
-import Register from './pages/Register';
 import { useAuth } from './contexts/AuthContext';
 import './App.scss';
 

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-if not "GITHUB_WORKFLOW" in os.environ:
+if "GITHUB_WORKFLOW" not in os.environ:
     DATABASE_URL = os.getenv("DATABASE_URL")
     if not DATABASE_URL:
         raise ValueError("DATABASE_URL environment variable is not set")
