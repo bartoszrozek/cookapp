@@ -13,15 +13,19 @@ COPY . .
 RUN npm run build
 
 # Stage 2: serve with nginx
-FROM nginx:stable-alpine
+# Stage 2: runtime using node to serve and proxy
+FROM node:18-alpine AS runtime
+WORKDIR /app
 
-# Remove default nginx static files
-RUN rm -rf /usr/share/nginx/html/*
+# Copy package.json and install production deps
+COPY package.json package-lock.json* ./
+RUN npm ci --only=prod --silent
 
-# Copy built assets from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copy built assets and server
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server.js ./server.js
 
-EXPOSE 80
+EXPOSE 8080
 
-# Keep nginx running
-CMD ["nginx", "-g", "daemon off;"]
+# Start the Node proxy server which serves the SPA and proxies /api
+CMD ["node", "server.js"]
