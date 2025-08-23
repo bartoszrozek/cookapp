@@ -73,15 +73,12 @@ function AppLayout() {
      ) : (
       <>
        <button onClick={() => navigate('/login')}>Login</button>
-       <button onClick={() => navigate('/register')} style={{ marginLeft: 8 }}>
-        Register
-       </button>
       </>
      )}
     </div>
     <Routes>
      <Route path='/login' element={<Login />} />
-     <Route path='/register' element={<Register />} />
+     {/* <Route path='/register' element={<Register />} /> */}
 
      <Route
       path='/ingredients'
