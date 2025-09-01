@@ -29,3 +29,9 @@ It may be run locally using Docker and Docker Compose and also on GCP using Clou
 - Add recipe ratings and reviews
 - Add better fridge item addition
 - Create simple export from shopping list to text file
+
+## App preview
+
+
+https://github.com/user-attachments/assets/814ded61-0c61-4b4c-898a-644ab86b9bc6
+
